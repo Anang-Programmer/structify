@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pointer - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            border-radius: 2px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: #a0a0a0;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+        }
+
+        button.danger:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .info {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .memory-display {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .memory-block {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            min-width: 120px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .memory-block:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0, 212, 170, 0.4);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .memory-block.selected {
+            border-color: #00d4aa !important;
+            background: rgba(0, 212, 170, 0.2) !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .memory-block.pointer {
+            border-color: rgba(155, 89, 182, 0.5);
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        .memory-block.pointer:hover {
+            border-color: rgba(155, 89, 182, 0.7);
+            background: rgba(155, 89, 182, 0.2);
+        }
+
+        .memory-block .address {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            margin-bottom: 0.25rem;
+        }
+
+        .memory-block .name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .memory-block .value {
+            font-size: 0.9rem;
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .memory-block .type {
+            font-size: 0.75rem;
+            color: #a0a0a0;
+            margin-top: 0.25rem;
+        }
+
+        .pointer-arrow {
+            font-size: 1.5rem;
+            color: #9b59b6;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .memory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .memory-table th {
+            background: rgba(0, 212, 170, 0.2);
+            color: #ffffff;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .memory-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .memory-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pointer-row {
+            background: rgba(155, 89, 182, 0.1) !important;
+        }
+
+        .operation-result {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+
+        .operation-result.show {
+            transform: translateX(0);
+        }
+
+        .operation-result.success {
+            background: linear-gradient(135deg, #27ae60 0%, #00d4aa 100%);
+            border: 1px solid rgba(39, 174, 96, 0.5);
+        }
+
+        .operation-result.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .about-section h3 {
+            color: #00d4aa;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .about-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .about-section li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #a0a0a0;
+        }
+
+        .about-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-weight: bold;
+        }
+
+        .about-section strong {
+            color: #ffffff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0a0;
+        }
+
+        .empty-state::before {
+            content: '💾';
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                grid-template-columns: 1fr;
+            }
+
+            .memory-display {
+                padding: 1rem;
+            }
+
+            .memory-table {
+                font-size: 0.9rem;
+            }
+
+            .memory-table th,
+            .memory-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Pointer</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section">
+            <h2>Pointer Operations</h2>
+
+            <div class="controls">
+                <div class="input-group">
+                    <label for="value-input">Value</label>
+                    <input type="text" id="value-input" placeholder="Enter a value (e.g., 42, hello)">
+                </div>
+                <div class="input-group">
+                    <label for="var-name-input">Variable Name</label>
+                    <input type="text" id="var-name-input" placeholder="Variable name (optional)">
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button onclick="allocateMemory()">📦 Allocate Memory</button>
+                <button onclick="createPointer()" class="secondary">🔗 Create Pointer</button>
+                <button onclick="dereferencePointer()" class="secondary">🎯 Dereference</button>
+                <button onclick="clearMemory()" class="danger">🗑️ Clear All</button>
+            </div>
+
+            <div class="info">
+                <strong>Memory Status:</strong>
+                Allocated Blocks: <span id="memory-count">0</span> |
+                Next Address: <span id="next-address">1000</span>
+                <span id="selected-info" style="display: none;"> | Selected: <span id="selected-address"></span></span>
+            </div>
+
+            <h3 style="color: #00d4aa; margin-top: 2rem; margin-bottom: 1rem;">Memory Visualization</h3>
+            <div id="memory-display" class="memory-display">
+                <div class="empty-state">
+                    No memory allocated yet. Click "Allocate Memory" to start!
+                </div>
+            </div>
+
+            <h3 style="color: #00d4aa; margin-top: 2rem; margin-bottom: 1rem;">Memory Table</h3>
+            <div style="overflow-x: auto;">
+                <table class="memory-table" id="memory-table">
+                    <thead>
+                        <tr>
+                            <th>Address</th>
+                            <th>Variable Name</th>
+                            <th>Value</th>
+                            <th>Type</th>
+                            <th>Is Pointer</th>
+                            <th>Points To</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memory-table-body">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: #a0a0a0; padding: 2rem;">No memory
+                                allocated</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section about-section">
+            <h2>Tentang Pointer</h2>
+            <p style="color: #a0a0a0; font-size: 1.1rem; margin-bottom: 1.5rem;"><strong>Pointer</strong> adalah
+                variabel
+                yang menyimpan alamat memori dari variabel lain. Konsep ini sangat penting dalam pemrograman untuk
+                manajemen memori dinamis dan akses data yang efisien.</p>
+
+            <h3>Karakteristik Pointer</h3>
+            <ul>
+                <li>Menyimpan alamat memori, bukan nilai langsung</li>
+                <li>Memungkinkan akses tidak langsung ke data</li>
+                <li>Berfungsi untuk struktur data dinamis</li>
+                <li>Mendukung passing by reference dalam fungsi</li>
+                <li>Dapat digunakan untuk alokasi memori dinamis</li>
+            </ul>
+
+            <h3>Operasi Dasar</h3>
+            <ul>
+                <li><strong>Declaration:</strong> Mendeklarasikan pointer dengan tipe data tertentu</li>
+                <li><strong>Assignment:</strong> Memberikan alamat variabel ke pointer</li>
+                <li><strong>Dereferencing:</strong> Mengakses nilai yang ditunjuk oleh pointer</li>
+                <li><strong>Pointer Arithmetic:</strong> Operasi aritmatika pada alamat pointer</li>
+            </ul>
+
+            <h3>Contoh Implementasi</h3>
+            <ul>
+                <li><strong>int *ptr</strong> → mendeklarasikan pointer ke tipe integer</li>
+                <li><strong>ptr = &variable</strong> → pointer menunjuk ke alamat variabel</li>
+                <li><strong>*ptr</strong> → dereferencing untuk mendapatkan nilainya</li>
+                <li><strong>ptr++</strong> → menggeser pointer ke alamat berikutnya</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <div id="operation-result" class="operation-result"></div>
+
+    <script>
+        let memory = {};
+        let nextAddress = 1000;
+        let selectedAddress = null;
+
+        function updateDisplay() {
+            const displayDiv = document.getElementById('memory-display');
+            const tableBody = document.getElementById('memory-table-body');
+            const selectedInfo = document.getElementById('selected-info');
+
+            if (Object.keys(memory).length === 0) {
+                displayDiv.innerHTML = '<div class="empty-state">No memory allocated yet. Click "Allocate Memory" to start!</div>';
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #a0a0a0; padding: 2rem;">No memory allocated</td></tr>';
+                selectedInfo.style.display = 'none';
+            } else {
+                // Update visual display
+                displayDiv.innerHTML = '';
+                const addresses = Object.keys(memory).sort((a, b) => parseInt(a) - parseInt(b));
+
+                addresses.forEach((address, index) => {
+                    const data = memory[address];
+                    const block = document.createElement('div');
+                    block.className = `memory-block ${data.is_pointer ? 'pointer' : ''} ${selectedAddress === address ? 'selected' : ''}`;
+
+                    block.innerHTML = `
+                        <div class="address">${address}</div>
+                        <div class="name">${data.variable_name}</div>
+                        <div class="value">${data.value}</div>
+                        <div class="type">${data.type}</div>
+                    `;
+
+                    block.onclick = () => selectAddress(address);
+                    displayDiv.appendChild(block);
+
+                    // Add arrow if it's a pointer
+                    if (data.is_pointer && memory[data.value]) {
+                        const arrow = document.createElement('div');
+                        arrow.className = 'pointer-arrow';
+                        arrow.innerHTML = '→';
+                        displayDiv.appendChild(arrow);
+                    }
+                });
+
+                // Update table
+                tableBody.innerHTML = '';
+                addresses.forEach(address => {
+                    const data = memory[address];
+                    const row = document.createElement('tr');
+                    if (data.is_pointer) row.className = 'pointer-row';
+
+                    row.innerHTML = `
+                        <td style="color: #00d4aa; font-weight: 500;">${address}</td>
+                        <td>${data.variable_name}</td>
+                        <td style="color: ${data.is_pointer ? '#9b59b6' : '#ffffff'};">${data.value}</td>
+                        <td><span style="background: rgba(0, 212, 170, 0.2); padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">${data.type}</span></td>
+                        <td>${data.is_pointer ? '<span style="color: #9b59b6;">●</span> Yes' : '<span style="color: #a0a0a0;">○</span> No'}</td>
+                        <td>${data.is_pointer && memory[data.value] ? memory[data.value].variable_name : '-'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+
+                // Update selected info
+                if (selectedAddress) {
+                    selectedInfo.style.display = 'inline';
+                    document.getElementById('selected-address').textContent = `${memory[selectedAddress].variable_name} (${selectedAddress})`;
+                } else {
+                    selectedInfo.style.display = 'none';
+                }
+            }
+
+            // Update status
+            document.getElementById('memory-count').textContent = Object.keys(memory).length;
+            document.getElementById('next-address').textContent = nextAddress;
+        }
+
+        function selectAddress(address) {
+            selectedAddress = selectedAddress === address ? null : address;
+            updateDisplay();
+
+            if (selectedAddress) {
+                showResult(`Selected ${memory[selectedAddress].variable_name} at address ${selectedAddress}`, false);
+            }
+        }
+
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('operation-result');
+            resultDiv.textContent = message;
+            resultDiv.className = `operation-result show ${isError ? 'error' : 'success'}`;
+
+            setTimeout(() => {
+                resultDiv.classList.remove('show');
+            }, 4000);
+        }
+
+        function allocateMemory() {
+            const value = document.getElementById('value-input').value.trim();
+            const varName = document.getElementById('var-name-input').value.trim();
+
+            if (value === '') {
+                showResult('Please enter a value to allocate memory', true);
+                return;
+            }
+
+            const address = nextAddress;
+            const finalVarName = varName || `var_${address}`;
+
+            // Try to parse as number, otherwise keep as string
+            let parsedValue = value;
+            let valueType = 'string';
+
+            if (!isNaN(value) && value !== '') {
+                parsedValue = parseFloat(value);
+                valueType = Number.isInteger(parsedValue) ? 'integer' : 'float';
+            }
+
+            memory[address] = {
+                value: parsedValue,
+                type: valueType,
+                variable_name: finalVarName,
+                is_pointer: false
+            };
+
+            nextAddress++;
+            updateDisplay();
+            showResult(`✅ Allocated memory: ${finalVarName} = ${parsedValue} at address ${address}`);
+
+            // Clear inputs
+            document.getElementById('value-input').value = '';
+            document.getElementById('var-name-input').value = '';
+        }
+
+        function createPointer() {
+            if (selectedAddress === null) {
+                showResult('Please select a memory block first by clicking on it', true);
+                return;
+            }
+
+            const varName = document.getElementById('var-name-input').value.trim() || `ptr_${nextAddress}`;
+            const address = nextAddress;
+
+            memory[address] = {
+                value: parseInt(selectedAddress),
+                type: 'pointer',
+                variable_name: varName,
+                is_pointer: true
+            };
+
+            nextAddress++;
+            const targetVar = memory[selectedAddress].variable_name;
+            updateDisplay();
+            showResult(`🔗 Created pointer: ${varName} → ${targetVar} (${selectedAddress})`);
+
+            document.getElementById('var-name-input').value = '';
+            selectedAddress = null;
+        }
+
+        function dereferencePointer() {
+            if (selectedAddress === null) {
+                showResult('Please select a pointer to dereference by clicking on it', true);
+                return;
+            }
+
+            const selectedData = memory[selectedAddress];
+            if (!selectedData.is_pointer) {
+                showResult('Selected memory block is not a pointer', true);
+                return;
+            }
+
+            const targetAddress = selectedData.value;
+            if (memory[targetAddress]) {
+                const targetValue = memory[targetAddress].value;
+                const targetVar = memory[targetAddress].variable_name;
+                showResult(`🎯 Dereferenced ${selectedData.variable_name}: *${selectedData.variable_name} = ${targetValue} (from ${targetVar})`);
+            } else {
+                showResult('Pointer points to invalid or deallocated address', true);
+            }
+        }
+
+        function clearMemory() {
+            if (Object.keys(memory).length === 0) {
+                showResult('Memory is already empty', true);
+                return;
+            }
+
+            const confirmed = confirm('Are you sure you want to clear all memory? This action cannot be undone.');
+            if (!confirmed) return;
+
+            memory = {};
+            nextAddress = 1000;
+            selectedAddress = null;
+            updateDisplay();
+            showResult('🗑️ All memory has been cleared');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        allocateMemory();
+                        break;
+                    case 'p':
+                        e.preventDefault();
+                        createPointer();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        dereferencePointer();
+                        break;
+                }
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+
+        // Add some demo data for better initial experience
+        setTimeout(() => {
+            if (Object.keys(memory).length === 0) {
+                // Auto-create some sample data after 2 seconds if empty
+                memory[1000] = {
+                    value: 42,
+                    type: 'integer',
+                    variable_name: 'num',
+                    is_pointer: false
+                };
+                memory[1001] = {
+                    value: 1000,
+                    type: 'pointer',
+                    variable_name: 'ptr_num',
+                    is_pointer: true
+                };
+                nextAddress = 1002;
+                updateDisplay();
+                showResult('📚 Sample data loaded - explore pointer operations!', false);
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 16px 16px 0 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            border-radius: 2px;
+        }
+
+        .controls {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="text"] {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: #a0a0a0;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            height: fit-content;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+        }
+
+        button.danger:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        .tree-display {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            min-height: 300px;
+            position: relative;
+            overflow: auto;
+        }
+
+        .tree-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tree-node {
+            display: flex;
+            align-items: center;
+            margin: 0.25rem 0;
+            padding: 0.5rem 0.75rem;
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tree-node:hover {
+            background: rgba(0, 212, 170, 0.2);
+            border-color: rgba(0, 212, 170, 0.5);
+            transform: translateX(5px);
+        }
+
+        .tree-node.root {
+            background: rgba(155, 89, 182, 0.2);
+            border-color: rgba(155, 89, 182, 0.4);
+            font-size: 1.1rem;
+        }
+
+        .tree-node.root:hover {
+            background: rgba(155, 89, 182, 0.3);
+            border-color: rgba(155, 89, 182, 0.6);
+        }
+
+        .tree-node::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .tree-indent {
+            color: #a0a0a0;
+            font-family: 'Courier New', monospace;
+            margin-right: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #a0a0a0;
+        }
+
+        .empty-state::before {
+            content: '🌳';
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .operation-result {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: #ffffff;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 300px;
+        }
+
+        .operation-result.show {
+            transform: translateX(0);
+        }
+
+        .operation-result.success {
+            background: linear-gradient(135deg, #27ae60 0%, #00d4aa 100%);
+            border: 1px solid rgba(39, 174, 96, 0.5);
+        }
+
+        .operation-result.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            border: 1px solid rgba(231, 76, 60, 0.5);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #00d4aa;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #a0a0a0;
+        }
+
+        .about-section h3 {
+            color: #00d4aa;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .about-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .about-section li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #a0a0a0;
+        }
+
+        .about-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-weight: bold;
+        }
+
+        .about-section strong {
+            color: #ffffff;
+        }
+
+        .traversal-demo {
+            background: rgba(155, 89, 182, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .traversal-demo h4 {
+            color: #9b59b6;
+            margin-bottom: 0.5rem;
+        }
+
+        .traversal-path {
+            font-family: 'Courier New', monospace;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .control-group {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tree-display {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Tree</h1>
+    </header>
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+
+        <div class="section">
+            <h2>Tree Operations</h2>
+
+            <div class="controls">
+                <div class="control-group">
+                    <div class="input-group">
+                        <label for="new-node">Node Name</label>
+                        <input type="text" id="new-node" placeholder="Enter node name">
+                    </div>
+                    <div class="input-group">
+                        <label for="parent-node">Parent Node</label>
+                        <input type="text" id="parent-node" placeholder="Parent name (empty = root)">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="input-group">
+                        <label for="delete-node">Delete Node</label>
+                        <input type="text" id="delete-node" placeholder="Node name to delete">
+                    </div>
+                    <button onclick="addNode()">➕ Add Node</button>
+                </div>
+
+                <div class="control-group">
+                    <button onclick="deleteNode()" class="danger">🗑️ Delete Node</button>
+                    <button onclick="clearTree()" class="secondary">🔄 Clear Tree</button>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="total-nodes">0</span>
+                    <span class="stat-label">Total Nodes</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="tree-height">0</span>
+                    <span class="stat-label">Tree Height</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="leaf-count">0</span>
+                    <span class="stat-label">Leaf Nodes</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <h2>Tree Visualization</h2>
+            <div class="tree-display" id="tree-output">
+                <div class="empty-state">
+                    No tree structure yet. Add a root node to start building your tree!
+                </div>
+            </div>
+
+            <div class="traversal-demo" id="traversal-demo" style="display: none;">
+                <h4>Pre-Order Traversal</h4>
+                <p style="color: #a0a0a0; font-size: 0.9rem;">Visit: Root → Left Children → Right Children</p>
+                <div class="traversal-path" id="traversal-path"></div>
+            </div>
+        </div>
+
+        <div class="section about-section">
+            <h2>Tentang Tree</h2>
+            <p style="color: #a0a0a0; font-size: 1.1rem; margin-bottom: 1.5rem;">
+                <strong>Tree</strong> adalah struktur data hierarkis yang terdiri dari node-node yang saling terhubung.
+                Setiap tree memiliki satu root node dan dapat memiliki banyak child node yang membentuk subtree.
+            </p>
+
+            <h3>Karakteristik Tree</h3>
+            <ul>
+                <li><strong>Root Node:</strong> Node teratas yang tidak memiliki parent</li>
+                <li><strong>Relasi Parent-Child:</strong> Setiap node (kecuali root) memiliki satu parent</li>
+                <li><strong>Leaf Nodes:</strong> Node yang tidak memiliki anak</li>
+                <li><strong>Tinggi (Height):</strong> Jarak terpanjang dari root ke leaf</li>
+                <li><strong>Subtree:</strong> Bagian dari tree yang dimulai dari node tertentu</li>
+            </ul>
+
+            <h3>Operasi Dasar</h3>
+            <ul>
+                <li><strong>Insert:</strong> Menambah node baru ke dalam tree</li>
+                <li><strong>Delete:</strong> Menghapus node beserta subtree-nya</li>
+                <li><strong>Search:</strong> Mencari node dengan nilai tertentu</li>
+                <li><strong>Traversal:</strong> Mengunjungi semua node dalam urutan tertentu</li>
+            </ul>
+
+            <h3>Jenis Traversal</h3>
+            <ul>
+                <li><strong>Pre-Order:</strong> Root → Kiri → Kanan</li>
+                <li><strong>In-Order:</strong> Kiri → Root → Kanan</li>
+                <li><strong>Post-Order:</strong> Kiri → Kanan → Root</li>
+                <li><strong>Level-Order:</strong> Berdasarkan level (Breadth-First)</li>
+            </ul>
+
+            <h3>Aplikasi Tree</h3>
+            <ul>
+                <li><strong>File System:</strong> Struktur direktori dan file</li>
+                <li><strong>DOM Tree:</strong> Representasi HTML di browser</li>
+                <li><strong>Decision Trees:</strong> Algoritma machine learning</li>
+                <li><strong>Expression Trees:</strong> Evaluasi ekspresi matematika</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <div id="operation-result" class="operation-result"></div>
+
+    <script>
+        class TreeNode {
+            constructor(value) {
+                this.value = value;
+                this.children = [];
+            }
+        }
+
+        let root = null;
+
+        function updateStats() {
+            const totalNodes = countNodes(root);
+            const height = getHeight(root);
+            const leafCount = countLeaves(root);
+
+            document.getElementById('total-nodes').textContent = totalNodes;
+            document.getElementById('tree-height').textContent = height;
+            document.getElementById('leaf-count').textContent = leafCount;
+        }
+
+        function countNodes(node) {
+            if (!node) return 0;
+            let count = 1;
+            for (let child of node.children) {
+                count += countNodes(child);
+            }
+            return count;
+        }
+
+        function getHeight(node) {
+            if (!node) return 0;
+            if (node.children.length === 0) return 1;
+            let maxHeight = 0;
+            for (let child of node.children) {
+                maxHeight = Math.max(maxHeight, getHeight(child));
+            }
+            return maxHeight + 1;
+        }
+
+        function countLeaves(node) {
+            if (!node) return 0;
+            if (node.children.length === 0) return 1;
+            let leafCount = 0;
+            for (let child of node.children) {
+                leafCount += countLeaves(child);
+            }
+            return leafCount;
+        }
+
+        function addNode() {
+            const newNodeName = document.getElementById('new-node').value.trim();
+            const parentName = document.getElementById('parent-node').value.trim();
+
+            if (newNodeName === '') {
+                showResult('Node name cannot be empty', true);
+                return;
+            }
+
+            // Check if node already exists
+            if (root && findNode(root, newNodeName)) {
+                showResult(`Node '${newNodeName}' already exists`, true);
+                return;
+            }
+
+            if (!root) {
+                if (parentName) {
+                    showResult('Cannot set parent for root node', true);
+                    return;
+                }
+                root = new TreeNode(newNodeName);
+                showResult(`✅ Root node '${newNodeName}' created`);
+            } else {
+                if (!parentName) {
+                    showResult('Parent node required (root already exists)', true);
+                    return;
+                }
+                const parent = findNode(root, parentName);
+                if (!parent) {
+                    showResult(`Parent '${parentName}' not found`, true);
+                    return;
+                }
+                parent.children.push(new TreeNode(newNodeName));
+                showResult(`✅ Node '${newNodeName}' added to '${parentName}'`);
+            }
+
+            document.getElementById('new-node').value = '';
+            document.getElementById('parent-node').value = '';
+            updateDisplay();
+        }
+
+        function deleteNode() {
+            const target = document.getElementById('delete-node').value.trim();
+
+            if (!target) {
+                showResult('Please enter node name to delete', true);
+                return;
+            }
+
+            if (!root) {
+                showResult('Tree is empty', true);
+                return;
+            }
+
+            if (root.value === target) {
+                root = null;
+                showResult(`🗑️ Root node '${target}' and entire tree deleted`);
+            } else {
+                const deleted = deleteHelper(root, target);
+                if (deleted) {
+                    showResult(`🗑️ Node '${target}' and its subtree deleted`);
+                } else {
+                    showResult(`Node '${target}' not found`, true);
+                }
+            }
+
+            document.getElementById('delete-node').value = '';
+            updateDisplay();
+        }
+
+        function deleteHelper(node, target) {
+            if (!node) return false;
+            for (let i = 0; i < node.children.length; i++) {
+                if (node.children[i].value === target) {
+                    node.children.splice(i, 1);
+                    return true;
+                } else {
+                    const found = deleteHelper(node.children[i], target);
+                    if (found) return true;
+                }
+            }
+            return false;
+        }
+
+        function findNode(node, value) {
+            if (!node || !value) return null;
+            if (node.value === value) return node;
+            for (let child of node.children) {
+                const found = findNode(child, value);
+                if (found) return found;
+            }
+            return null;
+        }
+
+        function clearTree() {
+            if (!root) {
+                showResult('Tree is already empty', true);
+                return;
+            }
+
+            const confirmed = confirm('Are you sure you want to clear the entire tree? This action cannot be undone.');
+            if (!confirmed) return;
+
+            root = null;
+            showResult('🔄 Tree cleared successfully');
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            const output = document.getElementById('tree-output');
+            const traversalDemo = document.getElementById('traversal-demo');
+
+            if (!root) {
+                output.innerHTML = '<div class="empty-state">No tree structure yet. Add a root node to start building your tree!</div>';
+                traversalDemo.style.display = 'none';
+            } else {
+                output.innerHTML = '<div class="tree-visual">' + formatTreeHTML(root, 0) + '</div>';
+
+                // Show traversal demo
+                traversalDemo.style.display = 'block';
+                const preOrderPath = getPreOrderTraversal(root);
+                document.getElementById('traversal-path').textContent = preOrderPath.join(' → ');
+            }
+
+            updateStats();
+        }
+
+        function formatTreeHTML(node, level) {
+            const indent = '  '.repeat(level);
+            const indentHTML = level > 0 ? `<span class="tree-indent">${'├─'.repeat(level)}</span>` : '';
+            const nodeClass = level === 0 ? 'tree-node root' : 'tree-node';
+
+            let html = `<div class="${nodeClass}" onclick="highlightNode('${node.value}')">${indentHTML}${node.value}</div>`;
+
+            for (let child of node.children) {
+                html += formatTreeHTML(child, level + 1);
+            }
+            return html;
+        }
+
+        function getPreOrderTraversal(node) {
+            if (!node) return [];
+            let result = [node.value];
+            for (let child of node.children) {
+                result = result.concat(getPreOrderTraversal(child));
+            }
+            return result;
+        }
+
+        function highlightNode(nodeName) {
+            showResult(`📍 Selected node: ${nodeName}`, false);
+        }
+
+        function showResult(msg, error = false) {
+            const div = document.getElementById('operation-result');
+            div.textContent = msg;
+            div.className = `operation-result show ${error ? 'error' : 'success'}`;
+
+            setTimeout(() => {
+                div.classList.remove('show');
+            }, 4000);
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        addNode();
+                        break;
+                    case 'Delete':
+                    case 'Backspace':
+                        e.preventDefault();
+                        deleteNode();
+                        break;
+                }
+            }
+        });
+
+        // Auto-focus on input
+        document.getElementById('new-node').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                addNode();
+            }
+        });
+
+        document.getElementById('delete-node').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                deleteNode();
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+
+        // Demo data
+        setTimeout(() => {
+            if (!root) {
+                // Create sample tree structure
+                root = new TreeNode('Company');
+                root.children = [
+                    new TreeNode('Engineering'),
+                    new TreeNode('Marketing'),
+                    new TreeNode('Sales')
+                ];
+
+                // Add children to Engineering
+                root.children[0].children = [
+                    new TreeNode('Frontend'),
+                    new TreeNode('Backend'),
+                    new TreeNode('DevOps')
+                ];
+
+                // Add children to Marketing
+                root.children[1].children = [
+                    new TreeNode('Digital'),
+                    new TreeNode('Content')
+                ];
+
+                updateDisplay();
+                showResult('📚 Sample organizational tree loaded!', false);
+            }
+        }, 2000);
+    </script>
+</body>
+
+</html>

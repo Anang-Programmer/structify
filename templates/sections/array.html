@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .input-group label {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        input[type="number"] {
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.2);
+        }
+
+        input[type="number"]::placeholder {
+            color: #a0a0a0;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            border: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+        }
+
+        button.danger:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .info {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .info strong {
+            color: #00d4aa;
+        }
+
+        .array-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin: 1.5rem 0;
+            min-height: 120px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .array-element {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #00d4aa 0%, #9b59b6 100%);
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.2);
+            margin-top: 10px;
+        }
+
+        .array-element:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+        }
+
+        .array-element.empty-element {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            color: #a0a0a0;
+            box-shadow: none;
+        }
+
+        .array-element.empty-element:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .array-element::before {
+            content: attr(data-index);
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            font-weight: 500;
+        }
+
+        #operation-result {
+            border-radius: 10px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        #operation-result.success {
+            background: linear-gradient(135deg, #00d4aa 0%, #27ae60 100%);
+            color: #ffffff;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+
+        #operation-result.error {
+            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 100%);
+            color: #ffffff;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .section h3 {
+            color: #00d4aa;
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 600;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            color: #a0a0a0;
+            margin: 0.8rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .section li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-size: 0.8rem;
+        }
+
+        .section li strong {
+            color: #ffffff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            color: #00d4aa;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+            /* Code Responsive */
+            .controls {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .input-group-wrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .input-group {
+                min-width: 100%;
+            }
+
+            .button-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .button-group button {
+                flex: 1 1 45%;
+                min-width: 120px;
+            }
+            /* ---- */
+            .array-display {
+                padding: 1rem;
+            }
+
+            .array-element {
+                width: 50px;
+                height: 50px;
+                font-size: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Array</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section fade-in">
+            <h2>Array Operations</h2>
+            <div class="controls">
+                <div class="input-group-wrapper">
+                    <div class="input-group">
+                        <label for="value-input">Value</label>
+                        <input type="number" id="value-input" placeholder="Enter value" min="0" max="999">
+                    </div>
+                    <div class="input-group">
+                        <label for="index-input">Index</label>
+                        <input type="number" id="index-input" placeholder="Index" min="0">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="insertValue()">Insert</button>
+                    <button onclick="insertAtIndex()">Insert at Index</button>
+                    <button onclick="deleteAtIndex()" class="danger">Delete at Index</button>
+                    <button onclick="searchValue()">Search</button>
+                    <button onclick="clearArray()" class="danger">Clear All</button>
+                </div>
+            </div>
+
+            <h3>Array Visualization</h3>
+            <div id="array-display" class="array-display">
+                <!-- Array elements will be displayed here -->
+            </div>
+
+            <div id="operation-result" style="display: none;">
+                <!-- Operation results will be shown here -->
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Size</h4>
+                    <div class="value" id="array-size">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Capacity</h4>
+                    <div class="value" id="array-capacity">10</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Status</h4>
+                    <div class="value" id="array-empty">Empty</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section fade-in">
+    <h2>Tentang Array</h2>
+    <p><strong>Array</strong> adalah struktur data linier yang menyimpan elemen dalam lokasi memori yang berurutan.
+        Setiap elemen dapat diakses menggunakan indeks.</p>
+
+    <h3>Karakteristik Array</h3>
+    <ul>
+        <li>Elemen disimpan dalam memori yang berurutan</li>
+        <li>Akses acak dengan kompleksitas O(1)</li>
+        <li>Ukuran tetap (array statis)</li>
+        <li>Tipe data homogen</li>
+    </ul>
+
+    <h3>Operasi Dasar</h3>
+    <ul>
+        <li><strong>Insert:</strong> Menambahkan elemen ke dalam array</li>
+        <li><strong>Delete:</strong> Menghapus elemen dari array</li>
+        <li><strong>Search:</strong> Mencari elemen di dalam array</li>
+        <li><strong>Access:</strong> Mengakses elemen berdasarkan indeksnya</li>
+    </ul>
+</div>
+
+
+    </div>
+
+    <script>
+        let arrayData = []; // Struktur Data Array
+        const maxCapacity = 10;
+
+        function updateDisplay() {
+            const displayDiv = document.getElementById('array-display');
+            displayDiv.innerHTML = '';
+
+            // Show actual elements
+            for (let i = 0; i < arrayData.length; i++) {
+                const element = document.createElement('div');
+                element.className = 'array-element';
+                element.textContent = arrayData[i];
+                element.setAttribute('data-index', i);
+                element.title = `Index: ${i}, Value: ${arrayData[i]}`;
+                element.addEventListener('click', () => highlightElement(element));
+                displayDiv.appendChild(element);
+            }
+
+            // Show empty slots
+            for (let i = arrayData.length; i < maxCapacity; i++) {
+                const element = document.createElement('div');
+                element.className = 'array-element empty-element';
+                element.textContent = '∅';
+                element.setAttribute('data-index', i);
+                element.title = `Index: ${i}, Empty`;
+                displayDiv.appendChild(element);
+            }
+
+            // Update status
+            document.getElementById('array-size').textContent = arrayData.length;
+            document.getElementById('array-capacity').textContent = maxCapacity;
+            document.getElementById('array-empty').textContent = arrayData.length === 0 ? 'Empty' : 'Filled';
+        }
+
+        function highlightElement(element) {
+            element.classList.add('pulse');
+            setTimeout(() => {
+                element.classList.remove('pulse');
+            }, 600);
+        }
+
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('operation-result');
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            resultDiv.className = isError ? 'error' : 'success';
+
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function insertValue() {
+            const value = document.getElementById('value-input').value;
+            if (value === '') {
+                showResult('Please enter a value', true);
+                return;
+            }
+
+            if (arrayData.length >= maxCapacity) {
+                showResult('Array is full! Cannot insert more elements.', true);
+                return;
+            }
+
+            arrayData.push(parseInt(value));
+            updateDisplay();
+            showResult(`✓ Inserted ${value} at index ${arrayData.length - 1}`);
+            document.getElementById('value-input').value = '';
+        }
+
+        function insertAtIndex() {
+            const value = document.getElementById('value-input').value;
+            const index = document.getElementById('index-input').value;
+
+            if (value === '' || index === '') {
+                showResult('Please enter both value and index', true);
+                return;
+            }
+
+            const idx = parseInt(index);
+            if (idx < 0 || idx > arrayData.length) {
+                showResult('Index out of bounds', true);
+                return;
+            }
+
+            if (arrayData.length >= maxCapacity) {
+                showResult('Array is full! Cannot insert more elements.', true);
+                return;
+            }
+
+            arrayData.splice(idx, 0, parseInt(value));
+            updateDisplay();
+            showResult(`✓ Inserted ${value} at index ${idx}`);
+            document.getElementById('value-input').value = '';
+            document.getElementById('index-input').value = '';
+        }
+
+        function deleteAtIndex() {
+            const index = document.getElementById('index-input').value;
+
+            if (index === '') {
+                showResult('Please enter index to delete', true);
+                return;
+            }
+
+            const idx = parseInt(index);
+            if (idx < 0 || idx >= arrayData.length) {
+                showResult('Index out of bounds', true);
+                return;
+            }
+
+            const deletedValue = arrayData.splice(idx, 1)[0];
+            updateDisplay();
+            showResult(`✓ Deleted value ${deletedValue} from index ${idx}`);
+            document.getElementById('index-input').value = '';
+        }
+
+        function searchValue() {
+            const value = document.getElementById('value-input').value;
+
+            if (value === '') {
+                showResult('Please enter value to search', true);
+                return;
+            }
+
+            const index = arrayData.indexOf(parseInt(value));
+            if (index !== -1) {
+                showResult(`✓ Value ${value} found at index ${index}`);
+                const elements = document.querySelectorAll('.array-element:not(.empty-element)');
+                if (elements[index]) {
+                    highlightElement(elements[index]);
+                }
+            } else {
+                showResult(`✗ Value ${value} not found in array`, true);
+            }
+            document.getElementById('value-input').value = '';
+        }
+
+        function clearArray() {
+            if (arrayData.length === 0) {
+                showResult('Array is already empty', true);
+                return;
+            }
+
+            arrayData = [];
+            updateDisplay();
+            showResult('✓ Array cleared successfully');
+        }
+
+        // Initialize display
+        updateDisplay();
+
+        // Add keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const activeElement = document.activeElement;
+                if (activeElement.id === 'value-input') {
+                    insertValue();
+                } else if (activeElement.id === 'index-input') {
+                    insertAtIndex();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

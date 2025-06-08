@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        /* Section Styles */
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls input,
+        .controls select {
+            padding: 0.875rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        .controls input::placeholder {
+            color: #a0a0a0;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        .template-btn {
+            margin-top: 1rem;
+            margin-right: 1rem;
+        }
+
+        /* Info Section */
+        .info {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .info strong {
+            color: #ffffff;
+        }
+
+        #operation-result {
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Record Display */
+        .record-display {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            min-height: 150px;
+            margin-bottom: 1.5rem;
+        }
+
+        .record-field {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .record-field:hover {
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateX(5px);
+        }
+
+        .field-name {
+            font-weight: 600;
+            color: #00d4aa;
+            font-size: 1rem;
+        }
+
+        .field-value {
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .field-type {
+            color: #a0a0a0;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .delete-btn {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .delete-btn:hover {
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Student Template */
+        .student-template {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 170, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .template-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .template-controls input {
+            padding: 0.875rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .template-controls input:focus,
+        .template-controls select:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        .template-controls input::placeholder {
+            color: #a0a0a0;
+        }
+
+
+        /* About Section */
+        .section p {
+            color: #a0a0a0;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            color: #a0a0a0;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .section li::before {
+            content: '▶';
+            color: #00d4aa;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .section li strong {
+            color: #ffffff;
+        }
+
+
+        select option {
+            background-color: #111827;
+            color: #fff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .template-controls {
+                grid-template-columns: 1fr;
+            }
+
+            .record-field {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .delete-btn {
+                margin-left: 0;
+                align-self: flex-end;
+            }
+        }
+
+        /* Loading Animation */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #9b59b6, #00d4aa);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Record</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section">
+            <h2>Record Operations</h2>
+            <div class="controls">
+                <input type="text" id="field-name-input" placeholder="Enter field name">
+                <input type="text" id="field-value-input" placeholder="Enter field value">
+                <select id="field-type-select">
+                    <option value="string">String</option>
+                    <option value="number">Number</option>
+                    <option value="boolean">Boolean</option>
+                    <option value="date">Date</option>
+                </select>
+                <button onclick="addField()">Add Field</button>
+                <button onclick="clearRecord()">Clear All</button>
+            </div>
+
+            <div class="info">
+                <strong>Record Status:</strong>
+                Fields: <span id="field-count">0</span> |
+                Memory Size: <span id="memory-size">0</span> bytes
+            </div>
+
+            <h3>Record Structure:</h3>
+            <div id="record-display" class="record-display">
+                <div style="color: #a0a0a0; padding: 20px; text-align: center; font-style: italic;">
+                    Record is empty - add some fields to get started
+                </div>
+            </div>
+
+            <div id="operation-result" class="info" style="display: none;">
+                <!-- Operation results will be shown here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Student Record Template</h2>
+            <div class="student-template">
+                <h3>Quick Student Record Creation</h3>
+                <div class="template-controls">
+                    <input type="text" id="student-id" placeholder="Student ID">
+                    <input type="text" id="student-name" placeholder="Student Name">
+                    <input type="number" id="student-age" placeholder="Age">
+                    <input type="text" id="student-grade" placeholder="Grade">
+                    <input type="text" id="student-email" placeholder="Email">
+                    <input type="text" id="student-phone" placeholder="Phone">
+                </div>
+                <button onclick="createStudentRecord()" class="template-btn">Create Student Record</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tentang Record</h2>
+            <p><strong>Record</strong> adalah struktur data yang mengelompokkan beberapa field yang saling terkait ke
+                dalam satu kesatuan.
+                Setiap field dapat memiliki tipe data yang berbeda dan diakses berdasarkan nama field-nya.</p>
+
+            <h3>Karakteristik Record:</h3>
+            <ul>
+                <li>Mengelompokkan data yang saling berkaitan dalam satu struktur</li>
+                <li>Setiap field memiliki nama unik dan tipe data tertentu</li>
+                <li>Akses field berdasarkan nama (bukan indeks)</li>
+                <li>Struktur data heterogen yang fleksibel</li>
+            </ul>
+
+            <h3>Operasi Dasar:</h3>
+            <ul>
+                <li><strong>Add Field:</strong> Menambahkan field baru ke dalam record</li>
+                <li><strong>Update Field:</strong> Mengubah nilai dari field yang sudah ada</li>
+                <li><strong>Delete Field:</strong> Menghapus field dari record</li>
+                <li><strong>Access Field:</strong> Mengakses nilai dari field berdasarkan nama</li>
+            </ul>
+
+            <h3>Contoh Penggunaan:</h3>
+            <ul>
+                <li>Data mahasiswa (NIM, nama, usia, nilai, IPK)</li>
+                <li>Data produk (kode, nama, harga, stok, kategori)</li>
+                <li>Data karyawan (NIP, nama, jabatan, gaji, departemen)</li>
+                <li>Data transaksi (ID, tanggal, jumlah, status)</li>
+            </ul>
+        </div>
+
+
+    </div>
+
+    <script>
+        let recordData = {};
+
+        function updateDisplay() {
+            const displayDiv = document.getElementById('record-display');
+
+            if (Object.keys(recordData).length === 0) {
+                displayDiv.innerHTML = '<div style="color: #a0a0a0; padding: 20px; text-align: center; font-style: italic;">Record is empty - add some fields to get started</div>';
+            } else {
+                displayDiv.innerHTML = '';
+                Object.keys(recordData).forEach(fieldName => {
+                    const fieldData = recordData[fieldName];
+                    const fieldDiv = document.createElement('div');
+                    fieldDiv.className = 'record-field';
+                    fieldDiv.innerHTML = `
+                        <div class="field-name">${fieldName}</div>
+                        <div class="field-value">${fieldData.value}</div>
+                        <div class="field-type">(${fieldData.type})</div>
+                        <button class="delete-btn" onclick="deleteField('${fieldName}')">Delete</button>
+                    `;
+                    displayDiv.appendChild(fieldDiv);
+                });
+            }
+
+            // Update status
+            const fieldCount = Object.keys(recordData).length;
+            const memorySize = calculateMemorySize();
+            document.getElementById('field-count').textContent = fieldCount;
+            document.getElementById('memory-size').textContent = memorySize;
+        }
+
+        function calculateMemorySize() {
+            let totalSize = 0;
+            Object.keys(recordData).forEach(fieldName => {
+                const fieldData = recordData[fieldName];
+                // Rough estimation of memory usage
+                totalSize += fieldName.length * 2; // field name
+                switch (fieldData.type) {
+                    case 'string':
+                        totalSize += fieldData.value.length * 2;
+                        break;
+                    case 'number':
+                        totalSize += 8;
+                        break;
+                    case 'boolean':
+                        totalSize += 1;
+                        break;
+                    case 'date':
+                        totalSize += 8;
+                        break;
+                    default:
+                        totalSize += 4;
+                }
+            });
+            return totalSize;
+        }
+
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('operation-result');
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = isError ? 'linear-gradient(135deg, #e74c3c, #f39c12)' : 'linear-gradient(135deg, #00d4aa, #9b59b6)';
+            resultDiv.style.color = 'white';
+            resultDiv.style.borderRadius = '12px';
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 4000);
+        }
+
+        function addField() {
+            const fieldName = document.getElementById('field-name-input').value.trim();
+            const fieldValue = document.getElementById('field-value-input').value;
+            const fieldType = document.getElementById('field-type-select').value;
+
+            if (fieldName === '' || fieldValue === '') {
+                showResult('Please enter both field name and value', true);
+                return;
+            }
+
+            if (recordData[fieldName]) {
+                showResult(`Field '${fieldName}' already exists. Use update instead.`, true);
+                return;
+            }
+
+            // Convert value based on type
+            let convertedValue = fieldValue;
+            switch (fieldType) {
+                case 'number':
+                    convertedValue = parseFloat(fieldValue);
+                    if (isNaN(convertedValue)) {
+                        showResult('Invalid number value', true);
+                        return;
+                    }
+                    break;
+                case 'boolean':
+                    convertedValue = fieldValue.toLowerCase() === 'true';
+                    break;
+                case 'date':
+                    convertedValue = new Date(fieldValue).toISOString().split('T')[0];
+                    break;
+            }
+
+            recordData[fieldName] = {
+                value: convertedValue,
+                type: fieldType
+            };
+
+            updateDisplay();
+            showResult(`Successfully added field '${fieldName}' with value '${convertedValue}'`);
+
+            document.getElementById('field-name-input').value = '';
+            document.getElementById('field-value-input').value = '';
+        }
+
+        function deleteField(fieldName) {
+            if (recordData[fieldName]) {
+                const deletedValue = recordData[fieldName].value;
+                delete recordData[fieldName];
+                updateDisplay();
+                showResult(`Successfully deleted field '${fieldName}' with value '${deletedValue}'`);
+            }
+        }
+
+        function clearRecord() {
+            if (Object.keys(recordData).length === 0) {
+                showResult('Record is already empty', true);
+                return;
+            }
+            recordData = {};
+            updateDisplay();
+            showResult('Record cleared successfully');
+        }
+
+        function createStudentRecord() {
+            const studentId = document.getElementById('student-id').value;
+            const studentName = document.getElementById('student-name').value;
+            const studentAge = document.getElementById('student-age').value;
+            const studentGrade = document.getElementById('student-grade').value;
+            const studentEmail = document.getElementById('student-email').value;
+            const studentPhone = document.getElementById('student-phone').value;
+
+            if (!studentId || !studentName) {
+                showResult('Please enter at least Student ID and Name', true);
+                return;
+            }
+
+            // Clear existing record
+            recordData = {};
+
+            // Add student fields
+            recordData['student_id'] = { value: studentId, type: 'string' };
+            recordData['name'] = { value: studentName, type: 'string' };
+
+            if (studentAge) {
+                recordData['age'] = { value: parseInt(studentAge), type: 'number' };
+            }
+            if (studentGrade) {
+                recordData['grade'] = { value: studentGrade, type: 'string' };
+            }
+            if (studentEmail) {
+                recordData['email'] = { value: studentEmail, type: 'string' };
+            }
+            if (studentPhone) {
+                recordData['phone'] = { value: studentPhone, type: 'string' };
+            }
+
+            updateDisplay();
+            showResult('Student record created successfully');
+
+            // Clear form
+            document.getElementById('student-id').value = '';
+            document.getElementById('student-name').value = '';
+            document.getElementById('student-age').value = '';
+            document.getElementById('student-grade').value = '';
+            document.getElementById('student-email').value = '';
+            document.getElementById('student-phone').value = '';
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.key === 'Enter') {
+                addField();
+            }
+            if (event.ctrlKey && event.key === 'Delete') {
+                clearRecord();
+            }
+        });
+
+        // Initialize display
+        updateDisplay();
+
+        // Add loading animation on page load
+        window.addEventListener('load', function () {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+
+</html>

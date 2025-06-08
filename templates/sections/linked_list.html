@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #9b59b6;
+            font-weight: 500;
+        }
+
+        .controls-group {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+
+
+        input[type="number"] {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #00d4aa;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        input[type="number"]::placeholder {
+            color: #a0a0a0;
+        }
+
+        button {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover:before {
+            left: 100%;
+        }
+
+        button:not(.clear-btn):not(.search-btn) {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            color: #ffffff;
+            border: 2px solid transparent;
+        }
+
+        button:not(.clear-btn):not(.search-btn):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            color: #ffffff;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #9b59b6, #00d4aa);
+            color: #ffffff;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(155, 89, 182, 0.3);
+        }
+
+        .info {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: #a0a0a0;
+        }
+
+        .info strong {
+            color: #ffffff;
+        }
+
+        .info span {
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .list-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .empty-list {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            font-style: italic;
+            text-align: center;
+            width: 100%;
+            padding: 2rem;
+        }
+
+        .node {
+            display: flex;
+            align-items: center;
+            margin-right: 1rem;
+            animation: nodeSlideIn 0.5s ease;
+        }
+
+        @keyframes nodeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .node-content {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(155, 89, 182, 0.2));
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            color: #ffffff;
+            padding: 1.25rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 80px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .node-content:hover {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-color: #e74c3c;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .head-label {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            color: #ffffff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(0, 212, 170, 0.3);
+        }
+
+        .pointer {
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #00d4aa, #9b59b6);
+            margin: 0 10px;
+            position: relative;
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+
+        .pointer::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #9b59b6;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            animation: pulse 2s infinite;
+        }
+
+        .null-pointer {
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-left: 10px;
+            padding: 0.5rem 1rem;
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            border-radius: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        #operation-result {
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-content {
+            color: #a0a0a0;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content strong {
+            color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #a0a0a0;
+        }
+
+        li:before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-size: 0.8rem;
+        }
+
+        li strong {
+            color: #ffffff;
+        }
+
+        /* Loading animation for operations */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.3), transparent);
+            animation: loading 1s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            #value-input {
+                grid-column: span 2;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+
+            #position-input {
+                grid-column: span 2;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+
+            button {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .clear-btn {
+                grid-column: span 2;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .list-container {
+                padding: 1rem;
+                min-height: 120px;
+            }
+
+            .node-content {
+                padding: 1rem 1.25rem;
+                min-width: 60px;
+                font-size: 1rem;
+            }
+
+            .pointer {
+                width: 30px;
+                margin: 0 5px;
+            }
+        }
+
+        /* Special highlight for found elements */
+        .found-element {
+            background: linear-gradient(135deg, #f39c12, #e74c3c) !important;
+            border-color: #f39c12 !important;
+            transform: translateY(-5px) scale(1.1) !important;
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.5) !important;
+            animation: found 2s ease !important;
+        }
+
+        @keyframes found {
+
+            0%,
+            100% {
+                transform: translateY(-5px) scale(1.1);
+            }
+
+            25%,
+            75% {
+                transform: translateY(-8px) scale(1.15);
+            }
+
+            50% {
+                transform: translateY(-5px) scale(1.1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Linked List</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section">
+            <h2>Linked List Operations</h2>
+
+            <div class="controls-group">
+                <h4>Basic Operations</h4>
+                <div class="controls">
+                    <input type="number" id="value-input" placeholder="Enter value" min="0" max="999">
+                    <button onclick="insertAtBeginning()">Insert at Beginning</button>
+                    <button onclick="insertAtEnd()">Insert at End</button>
+                    <button onclick="deleteAtBeginning()">Delete at Beginning</button>
+                    <button onclick="deleteAtEnd()">Delete at End</button>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <h4>Position-based Operations</h4>
+                <div class="controls">
+                    <input type="number" id="position-input" placeholder="Position" min="0">
+
+                    <button onclick="insertAtPosition()">Insert at Position</button>
+                    <button onclick="deleteAtPosition()">Delete at Position</button>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <h4>Search & Utility</h4>
+                <div class="controls">
+                    <button onclick="searchValue()" class="search-btn">Search Value</button>
+                    <button onclick="displayList()" class="search-btn">Display List</button>
+                    <button onclick="clearList()" class="clear-btn">Clear List</button>
+                </div>
+            </div>
+
+            <div class="info">
+                <strong>List Status:</strong>
+                Size: <span id="list-size">0</span> |
+                Empty: <span id="list-empty">Yes</span> |
+                Head: <span id="list-head">NULL</span>
+            </div>
+
+            <h3>Linked List Visualization:</h3>
+            <div class="list-container" id="list-display">
+                <div class="empty-list">Linked List is empty - HEAD → NULL</div>
+            </div>
+
+            <div id="operation-result" class="info" style="display: none;">
+                <!-- Operation results will be shown here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tentang Linked List</h2>
+            <div class="about-content">
+                <p><strong>Linked List</strong> adalah struktur data linier di mana elemen disimpan dalam node.
+                    Setiap node berisi data dan pointer yang menunjuk ke node berikutnya.</p>
+
+                <h3>Karakteristik Linked List:</h3>
+                <ul>
+                    <li>Ukuran dinamis - ukurannya dapat berubah saat program berjalan</li>
+                    <li>Akses sekuensial - diakses secara berurutan dari head</li>
+                    <li>Alokasi memori tidak berurutan</li>
+                    <li>Penyisipan dan penghapusan yang efisien</li>
+                </ul>
+
+                <h3>Operasi Dasar:</h3>
+                <ul>
+                    <li><strong>Insert:</strong> Menambahkan node baru (awal, akhir, posisi tertentu)</li>
+                    <li><strong>Delete:</strong> Menghapus node (awal, akhir, berdasarkan nilai)</li>
+                    <li><strong>Search:</strong> Mencari nilai dalam daftar</li>
+                    <li><strong>Display:</strong> Menampilkan semua elemen</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        let listData = [];
+        const maxSize = 10;
+
+        function updateDisplay() {
+            const displayDiv = document.getElementById('list-display');
+
+            if (listData.length === 0) {
+                displayDiv.innerHTML = '<div class="empty-list">Linked List is empty - HEAD → NULL</div>';
+            } else {
+                let nodesHTML = '';
+
+                for (let i = 0; i < listData.length; i++) {
+                    nodesHTML += `
+                        <div class="node">
+                            <div class="node-content" id="node-${i}" title="Position: ${i}, Value: ${listData[i]}" onclick="highlightNode(this)">
+                                ${i === 0 ? '<div class="head-label">HEAD</div>' : ''}
+                                ${listData[i]}
+                            </div>
+                            ${i < listData.length - 1 ? '<div class="pointer"></div>' : '<div class="null-pointer">NULL</div>'}
+                        </div>
+                    `;
+                }
+
+                displayDiv.innerHTML = nodesHTML;
+            }
+
+            // Update status
+            document.getElementById('list-size').textContent = listData.length;
+            document.getElementById('list-empty').textContent = listData.length === 0 ? 'Yes' : 'No';
+            document.getElementById('list-head').textContent = listData.length > 0 ? listData[0] : 'NULL';
+        }
+
+        function highlightNode(node) {
+            node.style.background = 'linear-gradient(135deg, #e74c3c, #f39c12)';
+            node.style.borderColor = '#e74c3c';
+            node.style.transform = 'translateY(-3px) scale(1.05)';
+            node.style.boxShadow = '0 8px 25px rgba(231, 76, 60, 0.4)';
+
+            setTimeout(() => {
+                node.style.background = '';
+                node.style.borderColor = '';
+                node.style.transform = '';
+                node.style.boxShadow = '';
+            }, 1000);
+        }
+
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('operation-result');
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = isError ? 'linear-gradient(135deg, #e74c3c, #f39c12)' : 'linear-gradient(135deg, #00d4aa, #9b59b6)';
+            resultDiv.style.color = 'white';
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function addLoadingEffect(button) {
+            button.classList.add('loading');
+            button.disabled = true;
+            setTimeout(() => {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }, 500);
+        }
+
+        function insertAtBeginning() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const value = document.getElementById('value-input').value;
+                if (value === '') {
+                    showResult('Please enter a value', true);
+                    return;
+                }
+                if (listData.length >= maxSize) {
+                    showResult('List is full!', true);
+                    return;
+                }
+
+                listData.unshift(parseInt(value));
+                updateDisplay();
+                showResult(`Inserted ${value} at beginning`);
+                document.getElementById('value-input').value = '';
+            }, 300);
+        }
+
+        function insertAtEnd() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const value = document.getElementById('value-input').value;
+                if (value === '') {
+                    showResult('Please enter a value', true);
+                    return;
+                }
+                if (listData.length >= maxSize) {
+                    showResult('List is full!', true);
+                    return;
+                }
+
+                listData.push(parseInt(value));
+                updateDisplay();
+                showResult(`Inserted ${value} at end`);
+                document.getElementById('value-input').value = '';
+            }, 300);
+        }
+
+        function insertAtPosition() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const value = document.getElementById('value-input').value;
+                const position = document.getElementById('position-input').value;
+
+                if (value === '' || position === '') {
+                    showResult('Please enter both value and position', true);
+                    return;
+                }
+
+                const pos = parseInt(position);
+                if (pos < 0 || pos > listData.length) {
+                    showResult('Position out of bounds', true);
+                    return;
+                }
+                if (listData.length >= maxSize) {
+                    showResult('List is full!', true);
+                    return;
+                }
+
+                listData.splice(pos, 0, parseInt(value));
+                updateDisplay();
+                showResult(`Inserted ${value} at position ${pos}`);
+                document.getElementById('value-input').value = '';
+                document.getElementById('position-input').value = '';
+            }, 300);
+        }
+
+        function deleteAtBeginning() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (listData.length === 0) {
+                    showResult('List is empty! Cannot delete', true);
+                    return;
+                }
+
+                const deletedValue = listData.shift();
+                updateDisplay();
+                showResult(`Deleted ${deletedValue} from beginning`);
+            }, 300);
+        }
+
+        function deleteAtEnd() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (listData.length === 0) {
+                    showResult('List is empty! Cannot delete', true);
+                    return;
+                }
+
+                const deletedValue = listData.pop();
+                updateDisplay();
+                showResult(`Deleted ${deletedValue} from end`);
+            }, 300);
+        }
+
+        function deleteAtPosition() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const position = document.getElementById('position-input').value;
+
+                if (position === '') {
+                    showResult('Please enter position to delete', true);
+                    return;
+                }
+
+                const pos = parseInt(position);
+                if (pos < 0 || pos >= listData.length) {
+                    showResult('Position out of bounds', true);
+                    return;
+                }
+
+                const deletedValue = listData.splice(pos, 1)[0];
+                updateDisplay();
+                showResult(`Deleted ${deletedValue} from position ${pos}`);
+                document.getElementById('position-input').value = '';
+            }, 300);
+        }
+
+        function searchValue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const value = document.getElementById('value-input').value;
+                if (value === '') {
+                    showResult('Please enter value to search', true);
+                    return;
+                }
+
+                const index = listData.indexOf(parseInt(value));
+                if (index !== -1) {
+                    showResult(`Value ${value} found at position ${index}`);
+                    // Highlight the found element
+                    setTimeout(() => {
+                        const foundNode = document.getElementById(`node-${index}`);
+                        if (foundNode) {
+                            foundNode.classList.add('found-element');
+                            setTimeout(() => {
+                                foundNode.classList.remove('found-element');
+                            }, 2000);
+                        }
+                    }, 100);
+                } else {
+                    showResult(`Value ${value} not found in list`, true);
+                }
+                document.getElementById('value-input').value = '';
+            }, 300);
+        }
+
+        function displayList() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (listData.length === 0) {
+                    showResult('List is empty', true);
+                    return;
+                }
+                showResult(`List contents: [${listData.join(' → ')}]`);
+            }, 300);
+        }
+
+        function clearList() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                listData = [];
+                updateDisplay();
+                showResult('List cleared');
+            }, 300);
+        }
+
+        // Handle Enter key for quick operations
+        document.getElementById('value-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                insertAtEnd();
+            }
+        });
+
+        document.getElementById('position-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                insertAtPosition();
+            }
+        });
+
+        // Add subtle animations on page load
+        window.addEventListener('load', function () {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+
+</html>

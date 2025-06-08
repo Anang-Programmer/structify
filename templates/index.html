@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structify - Interactive Data Structures</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Animated background particles */
+        .bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, #00d4aa, #9b59b6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6, #e74c3c);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(0, 212, 170, 0.3);
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #a0a0a0;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navigation */
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 1s ease-out 0.7s both;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            padding: 0.5rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: #a0a0a0;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .nav-tab:hover:not(.active) {
+            color: #00d4aa;
+            transform: translateY(-2px);
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Grid layout */
+        .data-structures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Card styles */
+        .structure-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            animation: fadeInUp 1s ease-out both;
+        }
+
+        .structure-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .structure-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .structure-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .structure-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .structure-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .structure-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .structure-card:nth-child(7) {
+            animation-delay: 0.7s;
+        }
+
+        .structure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #00d4aa20, #9b59b620);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .structure-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(0, 212, 170, 0.5);
+            box-shadow:
+                0 20px 40px rgba(0, 212, 170, 0.1),
+                0 0 0 1px rgba(0, 212, 170, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .structure-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+        }
+
+        .structure-card:hover .card-icon::before {
+            animation: shine 0.6s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .card-description {
+            color: #a0a0a0;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-complexity {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .complexity-item {
+            background: rgba(0, 212, 170, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+
+        .learn-btn {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .learn-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .learn-btn:hover::before {
+            left: 100%;
+        }
+
+        .learn-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 212, 170, 0.3);
+        }
+
+        /* Interactive demo section */
+        .demo-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.7rem 1.2rem;
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .demo-btn:hover {
+            background: rgba(0, 212, 170, 0.2);
+            border-color: #00d4aa;
+            transform: translateY(-2px);
+        }
+
+        .visualization-area {
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed rgba(0, 212, 170, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .viz-element {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 0 5px;
+            animation: slideIn 0.5s ease-out;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .viz-element:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+            animation: fadeInOverlay 0.4s ease forwards;
+        }
+
+        .popup-content {
+            background: #1f1f2e;
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 600px;
+            color: #f5f5f5;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            text-align: left;
+            font-family: 'Segoe UI', sans-serif;
+            animation: popupFadeIn 0.4s ease forwards;
+        }
+
+        .popup-content h2 {
+            margin-top: 0;
+            color: #ffc107;
+            font-size: 1.8rem;
+        }
+
+        .popup-content p {
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        .popup-content button {
+            background: #4caf50;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .popup-content button:hover {
+            background: #43a047;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            color: #c8c5c5;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .data-structures-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .demo-section {
+                padding: 2rem;
+            }
+
+            #stackViz p {
+                padding: 0 20px;
+                text-align: center;
+            }
+        }
+
+        /* Loading animation */
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .loading {
+            animation: pulse 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Animated background particles -->
+    <div class="bg-particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1 class="hero-title">Structify</h1>
+            <p class="hero-subtitle">Master Data Structures Through Interactive Visualization</p>
+
+            <div class="nav-container">
+                <div class="nav-tabs">
+                    <a href="#stack-demo"><button class="nav-tab active" onclick="showSection('fundamentals')">Try Now
+                            !</button></a>
+                    <!-- <button class="nav-tab" onclick="showSection('advanced')">Advanced</button>
+                    <button class="nav-tab" onclick="showSection('algorithms')">Algorithms</button> -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container">
+        <section id="fundamentals" class="content-section">
+            <div class="data-structures-grid">
+                <div class="structure-card" onclick="exploreStructure('array')">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Array</h3>
+                    <p class="card-description">Linear collection of elements stored in contiguous memory locations with
+                        constant-time access.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Access: O(1)</span>
+                        <span class="complexity-item">Search: O(n)</span>
+                    </div>
+                    <a href="/array"><button class="learn-btn">Explore Array</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('stack')">
+                    <div class="card-icon">📚</div>
+                    <h3 class="card-title">Stack</h3>
+                    <p class="card-description">LIFO (Last In, First Out) structure perfect for managing function calls
+                        and undo operations.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Push: O(1)</span>
+                        <span class="complexity-item">Pop: O(1)</span>
+                    </div>
+                    <a href="/stack"><button class="learn-btn">Explore Stack</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('queue')">
+                    <div class="card-icon">🚶</div>
+                    <h3 class="card-title">Queue</h3>
+                    <p class="card-description">FIFO (First In, First Out) structure ideal for scheduling and
+                        breadth-first traversals.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Enqueue: O(1)</span>
+                        <span class="complexity-item">Dequeue: O(1)</span>
+                    </div>
+                    <a href="/queue"><button class="learn-btn">Explore Queue</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('linkedlist')">
+                    <div class="card-icon">🔗</div>
+                    <h3 class="card-title">Linked List</h3>
+                    <p class="card-description">Dynamic structure where elements link to each other through pointers,
+                        enabling flexible node insertion.</p>
+
+                    <div class="card-complexity">
+                        <span class="complexity-item">Insert: O(1)</span>
+                        <span class="complexity-item">Search: O(n)</span>
+                    </div>
+                    <a href="/linked_list"><button class="learn-btn">Explore Linked List</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('tree')">
+                    <div class="card-icon">🌳</div>
+                    <h3 class="card-title">Class / Record</h3>
+                    <p class="card-description">Blueprint or template combining data and functions into a single unit to
+                        represent real-world or abstract objects.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Access: O(1)</span>
+                    </div>
+                    <a href="/record"><button class="learn-btn">Explore Record</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('hash')">
+                    <div class="card-icon">🗂️</div>
+                    <h3 class="card-title">Recursion</h3>
+                    <p class="card-description">Programming technique where a function calls itself to solve a problem
+                        by breaking it down into smaller subproblems.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Depends on problem size and recursion depth</span>
+                    </div>
+                    <a href="/recursion"><button class="learn-btn">Explore Recursion</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('graph')">
+                    <div class="card-icon">📍</div>
+                    <h3 class="card-title">Pointer</h3>
+                    <p class="card-description">Variable storing memory address of another variable, enabling direct
+                        manipulation of memory locations.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Access: O(1)</span>
+                    </div>
+                    <a href="/pointer"><button class="learn-btn">Explore Pointer</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('graph')">
+                    <div class="card-icon">🌳</div>
+                    <h3 class="card-title">Tree</h3>
+                    <p class="card-description">Hierarchical data structure consisting of nodes, with one root node and
+                        branches forming parent-child relationships.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Traversal: O(n)</span>
+                        <span class="complexity-item">Search: O(log n) <br> (balanced tree)</span>
+                    </div>
+                    <a href="/tree"><button class="learn-btn">Explore Pointer</button></a>
+                </div>
+
+                <div class="structure-card" onclick="exploreStructure('graph')">
+                    <div class="card-icon">🧭</div>
+                    <h3 class="card-title">Graph</h3>
+                    <p class="card-description">Data structure made up of nodes (vertices) and edges connecting pairs of
+                        nodes, used to represent networks and complex relationships.</p>
+                    <div class="card-complexity">
+                        <span class="complexity-item">Traversal: O(V + E)</span>
+                        <span class="complexity-item">Search: O(V + E)</span>
+                    </div>
+                    <a href="/graph"><button class="learn-btn">Explore Graph</button></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Demo Section -->
+        <section class="demo-section" id="stack-demo">
+            <h2 class="demo-title">Interactive Stack Visualization</h2>
+            <div class="demo-controls">
+                <button class="demo-btn" onclick="pushElement()">Push Element</button>
+                <button class="demo-btn" onclick="popElement()">Pop Element</button>
+                <button class="demo-btn" onclick="clearStack()">Clear Stack</button>
+            </div>
+            <div class="visualization-area" id="stackViz">
+                <p style="color: #666;">Click "Push Element" to add items to the stack!</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Structify. <br> All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="recursion-warning" class="popup-overlay">
+        <div class="popup-content">
+            <h2>Rekomendasi</h2>
+            <p>
+                Untuk pengalaman pengguna terbaik, sangat disarankan membuka halaman ini pada perangkat desktop
+                dan zoom out hingga 67%. Tata letak ini dirancang agar lebih responsif dan nyaman secara visual
+                pada skala tersebut.
+            </p>
+            <button onclick="closePopup()">Continue to Site!</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            // Cek apakah pop-up sudah pernah ditampilkan
+            if (!localStorage.getItem("popupShown")) {
+                document.getElementById("recursion-warning").style.display = "flex";
+                localStorage.setItem("popupShown", "true");
+            }
+        };
+
+        function closePopup() {
+            document.getElementById("recursion-warning").style.display = "none";
+        }
+
+        // Generate floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Navigation functionality
+        function showSection(sectionName) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Here you would typically show/hide different sections
+            console.log('Showing section:', sectionName);
+        }
+
+        // Explore structure functionality
+        function exploreStructure(structureType) {
+            console.log('Exploring:', structureType);
+            // Add a subtle animation to the clicked card
+            event.currentTarget.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                event.currentTarget.style.transform = '';
+            }, 150);
+        }
+
+        // Stack visualization
+        let stack = [];
+        let elementCounter = 1;
+
+        function pushElement() {
+            const stackViz = document.getElementById('stackViz');
+            const newElement = document.createElement('div');
+            newElement.className = 'viz-element';
+            newElement.textContent = elementCounter++;
+            newElement.onclick = () => highlightElement(newElement);
+
+            stack.push(newElement);
+
+            if (stack.length === 1) {
+                stackViz.innerHTML = '';
+            }
+
+            stackViz.appendChild(newElement);
+
+            // Animate the new element
+            newElement.style.transform = 'translateY(-100px)';
+            setTimeout(() => {
+                newElement.style.transform = 'translateY(0)';
+            }, 50);
+        }
+
+        function popElement() {
+            if (stack.length > 0) {
+                const element = stack.pop();
+                element.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => {
+                    element.remove();
+                    if (stack.length === 0) {
+                        document.getElementById('stackViz').innerHTML = '<p style="color: #666;">Stack is empty! Click "Push Element" to add items.</p>';
+                    }
+                }, 300);
+            }
+        }
+
+        function clearStack() {
+            const stackViz = document.getElementById('stackViz');
+            stack.forEach((element, index) => {
+                setTimeout(() => {
+                    element.style.animation = 'slideIn 0.3s ease-out reverse';
+                    setTimeout(() => element.remove(), 300);
+                }, index * 100);
+            });
+
+            setTimeout(() => {
+                stack = [];
+                stackViz.innerHTML = '<p style="color: #666;">Stack cleared! Click "Push Element" to add items.</p>';
+            }, stack.length * 100 + 300);
+        }
+
+        function highlightElement(element) {
+            element.style.background = 'linear-gradient(135deg, #e74c3c, #f39c12)';
+            setTimeout(() => {
+                element.style.background = 'linear-gradient(135deg, #00d4aa, #9b59b6)';
+            }, 500);
+        }
+
+        // Add smooth scrolling and intersection observer for animations
+        function addScrollAnimations() {
+            const cards = document.querySelectorAll('.structure-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        }
+
+        // Initialize everything when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            addScrollAnimations();
+
+            // Add some initial loading animation
+            document.body.classList.add('loading');
+            setTimeout(() => {
+                document.body.classList.remove('loading');
+            }, 1000);
+        });
+
+        // Add cursor follow effect
+        document.addEventListener('mousemove', (e) => {
+            const cursor = document.querySelector('.cursor');
+            if (!cursor) {
+                const newCursor = document.createElement('div');
+                newCursor.className = 'cursor';
+                newCursor.style.cssText = `
+                    position: fixed;
+                    width: 20px;
+                    height: 20px;
+                    background: radial-gradient(circle, rgba(0,212,170,0.3) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    transition: transform 0.1s ease;
+                `;
+                document.body.appendChild(newCursor);
+            }
+
+            const cursorElement = document.querySelector('.cursor');
+            cursorElement.style.left = (e.clientX - 10) + 'px';
+            cursorElement.style.top = (e.clientY - 10) + 'px';
+        });
+    </script>
+</body>
+</html>

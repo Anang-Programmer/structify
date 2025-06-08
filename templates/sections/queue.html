@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            text-align: center;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 1rem 0;
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+        }
+
+        #value-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.875rem 1.25rem;
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        #value-input:focus {
+            border-color: #00d4aa;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        #value-input::placeholder {
+            color: #a0a0a0;
+        }
+
+        button {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover:before {
+            left: 100%;
+        }
+
+        button:not(.clear-btn) {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            color: #ffffff;
+            border: 2px solid transparent;
+        }
+
+        button:not(.clear-btn):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            color: #ffffff;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        .info {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            color: #a0a0a0;
+        }
+
+        .info strong {
+            color: #ffffff;
+        }
+
+        .info span {
+            color: #00d4aa;
+            font-weight: 500;
+        }
+
+        .queue-container {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .queue-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .queue-label {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .queue-elements {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding: 0.5rem 0;
+        }
+
+        .queue-element {
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.2), rgba(155, 89, 182, 0.2));
+            border: 2px solid rgba(0, 212, 170, 0.3);
+            color: #ffffff;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .queue-element:hover {
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border-color: #e74c3c;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .queue-element:first-child {
+            border-color: #00d4aa;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
+        }
+
+        .queue-element:last-child {
+            border-color: #9b59b6;
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.3);
+        }
+
+        .arrow {
+            color: #00d4aa;
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .empty-queue {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        #operation-result {
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .about-content {
+            color: #a0a0a0;
+            line-height: 1.8;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content strong {
+            color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #a0a0a0;
+        }
+
+        li:before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #00d4aa;
+            font-size: 0.8rem;
+        }
+
+        li strong {
+            color: #ffffff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+
+            #value-input {
+                grid-column: span 2;
+                width: 100%;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+
+            button {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+
+            .clear-btn {
+                grid-column: span 2;
+            }
+
+            .queue-container {
+                padding: 1rem;
+                min-height: 100px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .queue-labels {
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .queue-label {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+                flex: 1;
+                text-align: center;
+            }
+
+            .queue-elements {
+                gap: 0.4rem;
+                padding: 0.5rem 0;
+                overflow-x: auto;
+                width: 100%;
+            }
+
+            .queue-element {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+                min-width: 50px;
+            }
+
+            .empty-queue {
+                font-size: 0.9rem;
+                text-align: center;
+                width: 100%;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Loading animation for operations */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.3), transparent);
+            animation: loading 1s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Queue</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section">
+            <h2>Queue Operations</h2>
+            <div class="controls">
+                <input type="number" id="value-input" placeholder="Enter value to enqueue" min="0" max="999">
+                <button onclick="enqueueValue()">Enqueue</button>
+                <button onclick="dequeueValue()">Dequeue</button>
+                <button onclick="frontValue()">Front</button>
+                <button onclick="rearValue()">Rear</button>
+                <button onclick="clearQueue()" class="clear-btn">Clear</button>
+            </div>
+
+            <div class="info">
+                <strong>Queue Status:</strong>
+                Size: <span id="queue-size">0</span> |
+                Front: <span id="queue-front">Empty</span> |
+                Rear: <span id="queue-rear">Empty</span> |
+                Empty: <span id="queue-empty">Yes</span>
+            </div>
+
+            <h3>Queue Visualization:</h3>
+            <div class="queue-container" id="queue-display">
+                <div class="queue-labels">
+                    <div class="queue-label">FRONT</div>
+                    <div class="queue-label">REAR</div>
+                </div>
+                <div class="empty-queue">Queue is empty</div>
+            </div>
+
+            <div id="operation-result" class="info" style="display: none;">
+                <!-- Operation results will be shown here -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tentang Queue</h2>
+            <div class="about-content">
+                <p><strong>Queue</strong> adalah struktur data yang mengikuti prinsip FIFO (First In First Out). Elemen
+                    pertama
+                    yang dimasukkan akan menjadi yang pertama dikeluarkan, mirip seperti antrian dalam kehidupan nyata.
+                </p>
+
+                <h3>Karakteristik Queue:</h3>
+                <ul>
+                    <li>Penyisipan (enqueue) dilakukan di bagian belakang</li>
+                    <li>Penghapusan (dequeue) dilakukan di bagian depan</li>
+                    <li>Kompleksitas operasi adalah O(1)</li>
+                    <li>Digunakan dalam penjadwalan, buffering, dan lain-lain</li>
+                </ul>
+
+                <h3>Operasi Dasar:</h3>
+                <ul>
+                    <li><strong>Enqueue:</strong> Menambahkan elemen ke belakang queue</li>
+                    <li><strong>Dequeue:</strong> Menghapus dan mengembalikan elemen di depan</li>
+                    <li><strong>Front:</strong> Melihat elemen paling depan tanpa menghapusnya</li>
+                    <li><strong>Rear:</strong> Melihat elemen paling belakang tanpa menghapusnya</li>
+                    <li><strong>isEmpty:</strong> Mengecek apakah queue kosong</li>
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        let queueData = [];
+        const maxCapacity = 8;
+
+        function updateDisplay() {
+            const displayDiv = document.getElementById('queue-display');
+
+            if (queueData.length === 0) {
+                displayDiv.innerHTML = `
+                    <div class="queue-labels">
+                        <div class="queue-label">FRONT</div>
+                        <div class="queue-label">REAR</div>
+                    </div>
+                    <div class="empty-queue">Queue is empty</div>
+                `;
+            } else {
+                let elementsHTML = `
+                    <div class="queue-labels">
+                        <div class="queue-label">FRONT</div>
+                        <div class="queue-label">REAR</div>
+                    </div>
+                    <div class="queue-elements">
+                `;
+
+                for (let i = 0; i < queueData.length; i++) {
+                    elementsHTML += `<div class="queue-element" title="Position: ${i}, Value: ${queueData[i]}" onclick="highlightElement(this)">${queueData[i]}</div>`;
+                    if (i < queueData.length - 1) {
+                        elementsHTML += '<span class="arrow">→</span>';
+                    }
+                }
+
+                elementsHTML += '</div>';
+                displayDiv.innerHTML = elementsHTML;
+            }
+
+            // Update status
+            document.getElementById('queue-size').textContent = queueData.length;
+            document.getElementById('queue-front').textContent = queueData.length > 0 ? queueData[0] : 'Empty';
+            document.getElementById('queue-rear').textContent = queueData.length > 0 ? queueData[queueData.length - 1] : 'Empty';
+            document.getElementById('queue-empty').textContent = queueData.length === 0 ? 'Yes' : 'No';
+        }
+
+        function highlightElement(element) {
+            element.style.background = 'linear-gradient(135deg, #e74c3c, #f39c12)';
+            element.style.borderColor = '#e74c3c';
+            element.style.transform = 'translateY(-3px) scale(1.05)';
+            element.style.boxShadow = '0 8px 25px rgba(231, 76, 60, 0.4)';
+
+            setTimeout(() => {
+                element.style.background = '';
+                element.style.borderColor = '';
+                element.style.transform = '';
+                element.style.boxShadow = '';
+            }, 1000);
+        }
+
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('operation-result');
+            resultDiv.textContent = message;
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = isError ? 'linear-gradient(135deg, #e74c3c, #f39c12)' : 'linear-gradient(135deg, #00d4aa, #9b59b6)';
+            resultDiv.style.color = 'white';
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        function addLoadingEffect(button) {
+            button.classList.add('loading');
+            button.disabled = true;
+            setTimeout(() => {
+                button.classList.remove('loading');
+                button.disabled = false;
+            }, 500);
+        }
+
+        function enqueueValue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                const value = document.getElementById('value-input').value;
+                if (value === '') {
+                    showResult('Please enter a value to enqueue', true);
+                    return;
+                }
+                if (queueData.length >= maxCapacity) {
+                    showResult('Queue is full!', true);
+                    return;
+                }
+
+                queueData.push(parseInt(value));
+                updateDisplay();
+                showResult(`Enqueued ${value} to queue`);
+                document.getElementById('value-input').value = '';
+            }, 300);
+        }
+
+        function dequeueValue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (queueData.length === 0) {
+                    showResult('Queue is empty! Cannot dequeue', true);
+                    return;
+                }
+
+                const dequeuedValue = queueData.shift();
+                updateDisplay();
+                showResult(`Dequeued ${dequeuedValue} from queue`);
+            }, 300);
+        }
+
+        function frontValue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (queueData.length === 0) {
+                    showResult('Queue is empty! No front element', true);
+                    return;
+                }
+
+                const frontElement = queueData[0];
+                showResult(`Front element is: ${frontElement}`);
+            }, 300);
+        }
+
+        function rearValue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                if (queueData.length === 0) {
+                    showResult('Queue is empty! No rear element', true);
+                    return;
+                }
+
+                const rearElement = queueData[queueData.length - 1];
+                showResult(`Rear element is: ${rearElement}`);
+            }, 300);
+        }
+
+        function clearQueue() {
+            const button = event.target;
+            addLoadingEffect(button);
+
+            setTimeout(() => {
+                queueData = [];
+                updateDisplay();
+                showResult('Queue cleared');
+            }, 300);
+        }
+
+        // Handle Enter key for enqueue operation
+        document.getElementById('value-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                enqueueValue();
+            }
+        });
+
+        // Add subtle animations on page load
+        window.addEventListener('load', function () {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    section.style.transition = 'all 0.6s ease';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+
+</html>

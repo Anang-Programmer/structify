@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursion - Data Structure Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            color: #a0a0a0;
+            font-size: 1.1rem;
+        }
+
+        /*Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 12px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.2);
+        }
+
+        /* Section Styles */
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .section h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: #00d4aa;
+        }
+
+        /* Controls Section */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .controls select,
+        .controls input {
+            padding: 0.875rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .controls select:focus,
+        .controls input:focus {
+            outline: none;
+            border-color: rgba(0, 212, 170, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+        }
+
+        .controls input::placeholder {
+            color: #a0a0a0;
+        }
+
+        .controls select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        /* Button Styles */
+        button {
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        #clear-results {
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, #e74c3c, #f39c12);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #clear-results:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Info Section */
+        .info {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #a0a0a0;
+            font-size: 0.95rem;
+        }
+
+        .info strong {
+            color: #ffffff;
+        }
+
+        /* Result Display */
+        .result-display {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+        }
+
+        .result-display strong {
+            color: #00d4aa;
+        }
+
+        /* Call Stack Visualization */
+        .call-stack {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .call-stack h4 {
+            margin-bottom: 1rem;
+        }
+
+        #call-stack-items {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .call-item {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .call-item:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+            transform: translateX(5px);
+        }
+
+        /* Special Displays */
+        #special-display {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .fibonacci-sequence {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .fib-number {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+            font-weight: 600;
+            color: #00d4aa;
+            transition: all 0.3s ease;
+        }
+
+        .fib-number:hover {
+            background: rgba(0, 212, 170, 0.2);
+            transform: scale(1.05);
+        }
+
+        .hanoi-moves {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .hanoi-move {
+            background: rgba(155, 89, 182, 0.1);
+            border: 1px solid rgba(155, 89, 182, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #9b59b6;
+            transition: all 0.3s ease;
+        }
+
+        .hanoi-move:hover {
+            background: rgba(155, 89, 182, 0.2);
+            transform: translateX(5px);
+        }
+
+        /* About Section */
+        .section p {
+            color: #a0a0a0;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .section li {
+            color: #a0a0a0;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .section li::before {
+            content: '▶';
+            color: #00d4aa;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .section li strong {
+            color: #ffffff;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+            animation: fadeInOverlay 0.4s ease forwards;
+        }
+
+        .popup-content {
+            background: #1f1f2e;
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 600px;
+            color: #f5f5f5;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+            text-align: left;
+            font-family: 'Segoe UI', sans-serif;
+            animation: popupFadeIn 0.4s ease forwards;
+        }
+
+        .popup-content h2 {
+            margin-top: 0;
+            color: #ffc107;
+            font-size: 1.8rem;
+        }
+
+        .popup-content p {
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        .popup-content button {
+            background: #4caf50;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .popup-content button:hover {
+            background: #43a047;
+        }
+
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInOverlay {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .fibonacci-sequence {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00d4aa, #9b59b6);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #9b59b6, #00d4aa);
+        }
+
+        /* Error States */
+        .error {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+            border-color: rgba(231, 76, 60, 0.3);
+        }
+
+        /* Success States */
+        .success {
+            color: #00d4aa;
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.3);
+        }
+
+        /* Function Status Indicator */
+        .function-status {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00d4aa;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Recursion</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Home</a>
+
+        <div class="section">
+            <h2>Recursion Operations</h2>
+
+            <div class="controls">
+                <select id="function-select">
+                    <option value="factorial">Factorial (n!)</option>
+                    <option value="fibonacci">Fibonacci Sequence</option>
+                    <option value="fibonacci_optimized">Fibonacci (Optimized)</option>
+                    <option value="power">Power (a^b)</option>
+                    <option value="sum_array">Sum Array</option>
+                    <option value="reverse_string">Reverse String</option>
+                    <option value="binary_search">Binary Search</option>
+                    <option value="gcd">GCD (Greatest Common Divisor)</option>
+                    <option value="tower_of_hanoi">Tower of Hanoi</option>
+                </select>
+
+                <input type="number" id="input1" placeholder="Input 1" min="0" max="20">
+                <input type="number" id="input2" placeholder="Input 2" min="0" max="100" style="display:none;">
+                <input type="text" id="string-input" placeholder="Enter string" style="display:none;">
+                <input type="text" id="array-input" placeholder="Array (comma separated)" style="display:none;">
+
+                <button onclick="executeFunction()">Execute Function</button>
+                <button onclick="clearResults()" id="clear-results">Clear Results</button>
+                <button onclick="showCallStack()">Show Call Stack</button>
+            </div>
+
+            <div class="info">
+                <span class="function-status"></span>
+                <strong>Function:</strong> <span id="current-function">factorial</span> |
+                <strong>Input:</strong> <span id="current-input">-</span> |
+                <strong>Result:</strong> <span id="current-result">-</span> |
+                <strong>Calls:</strong> <span id="call-count">0</span>
+            </div>
+
+            <div id="result-display" class="result-display">
+                <p>Select a recursive function and provide input to see the magic of recursion in action.</p>
+            </div>
+
+            <div id="call-stack-display" class="call-stack" style="display:none;">
+                <h4>📚 Call Stack Visualization:</h4>
+                <div id="call-stack-items"></div>
+            </div>
+
+            <div id="special-display" style="display:none;">
+                <!-- For special visualizations like Fibonacci sequence or Hanoi moves -->
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tentang Rekursi</h2>
+            <p><strong>Rekursi</strong> adalah teknik pemrograman yang elegan di mana sebuah fungsi memanggil dirinya
+                sendiri untuk menyelesaikan
+                masalah kompleks dengan memecahnya menjadi sub-masalah yang lebih sederhana dan identik.</p>
+
+            <h3>🔧 Komponen Dasar Rekursi:</h3>
+            <ul>
+                <li><strong>Base Case:</strong> Kondisi terminal yang menghentikan rekursi dan mencegah loop tak
+                    berujung</li>
+                <li><strong>Recursive Case:</strong> Fungsi memanggil dirinya sendiri dengan parameter yang lebih
+                    kecil/sederhana</li>
+                <li><strong>Progress Condition:</strong> Setiap pemanggilan harus membawa kita lebih dekat ke base case
+                </li>
+            </ul>
+
+            <h3>🚀 Fungsi Rekursif yang Tersedia:</h3>
+            <ul>
+                <li><strong>Factorial:</strong> n! = n × (n-1)! - Menghitung hasil perkalian dari deretan angka</li>
+                <li><strong>Fibonacci:</strong> F(n) = F(n-1) + F(n-2) - Deret matematika klasik</li>
+                <li><strong>Fibonacci Optimized:</strong> Menggunakan memoization untuk efisiensi</li>
+                <li><strong>Power:</strong> base^exponent - Perpangkatan menggunakan metode bagi dan taklukkan</li>
+                <li><strong>Sum Array:</strong> Menjumlahkan semua elemen dalam array secara rekursif</li>
+                <li><strong>Reverse String:</strong> Membalikkan sebuah string karakter per karakter</li>
+                <li><strong>Binary Search:</strong> Pencarian efisien dalam array yang sudah terurut</li>
+                <li><strong>GCD:</strong> Algoritma Euclidean untuk mencari faktor persekutuan terbesar</li>
+                <li><strong>Tower of Hanoi:</strong> Puzzle klasik dengan solusi rekursif yang elegan</li>
+            </ul>
+
+            <h3>⚖️ Kelebihan dan Kekurangan Rekursi:</h3>
+            <p><strong>Kelebihan:</strong> Kode yang bersih, elegan, dan mudah dipahami untuk masalah yang memang
+                bersifat rekursif secara alami. Pendekatan intuitif untuk masalah bagi dan taklukkan.</p>
+            <p><strong>Kekurangan:</strong> Beban memori akibat tumpukan panggilan fungsi, risiko stack overflow untuk
+                input besar, dan kadang lebih lambat dibanding solusi iteratif.</p>
+
+            <h3>💡 Tips Optimasi:</h3>
+            <ul>
+                <li><strong>Memoization:</strong> Menyimpan hasil perhitungan untuk menghindari duplikasi</li>
+                <li><strong>Tail Recursion:</strong> Optimasi dengan menempatkan panggilan rekursif di akhir fungsi</li>
+                <li><strong>Iterative Alternative:</strong> Pertimbangkan solusi iteratif untuk performa kritis</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div id="recursion-warning" class="popup-overlay">
+    <div class="popup-content">
+        <h2>⚠️ Perhatian: Operasi Rekursif</h2>
+        <p>
+            Halaman ini melibatkan penggunaan <strong>fungsi rekursif</strong>, teknik pemrograman yang kuat namun sensitif.
+            Logika rekursif dapat memanggil fungsi yang sama berulang kali hingga kondisi tertentu terpenuhi.
+            Jika input terlalu besar atau salah, hal ini dapat menyebabkan <strong>loop tak berujung</strong>,
+            <strong>stack overflow</strong>, atau bahkan membuat browser Anda tidak responsif.
+        </p>
+        <p>
+            Harap masukkan nilai dengan hati-hati dan pastikan Anda memahami apa yang diharapkan oleh setiap fungsi.
+            Ini sangat penting untuk opsi seperti <strong>Fibonacci</strong>, <strong>Factorial</strong>,
+            dan <strong>Power</strong>,
+            di mana rekursi yang dalam mungkin terjadi.
+        </p>
+        <p style="font-style: italic;">
+            Jika Anda tidak yakin, mulailah dengan angka kecil terlebih dahulu (misalnya, 3, 5, atau 8), dan tingkatkan secara bertahap.
+            Utamakan keselamatan — browser dan CPU Anda akan berterima kasih!
+        </p>
+        <button onclick="closePopup()">Saya Mengerti, Lanjutkan</button>
+    </div>
+</div>
+
+
+
+    <script>
+        window.onload = function () {
+            document.getElementById("recursion-warning").style.display = "flex";
+        };
+
+        function closePopup() {
+            document.getElementById("recursion-warning").style.display = "none";
+        }
+        let callStack = [];
+        let currentFunction = 'factorial';
+        let executionStartTime = 0;
+
+        // Update input fields based on selected function
+        document.getElementById('function-select').addEventListener('change', function () {
+            currentFunction = this.value;
+            updateInputFields();
+            document.getElementById('current-function').textContent = currentFunction;
+            clearResults();
+        });
+
+        function updateInputFields() {
+            const input1 = document.getElementById('input1');
+            const input2 = document.getElementById('input2');
+            const stringInput = document.getElementById('string-input');
+            const arrayInput = document.getElementById('array-input');
+
+            // Hide all inputs first
+            input1.style.display = 'none';
+            input2.style.display = 'none';
+            stringInput.style.display = 'none';
+            arrayInput.style.display = 'none';
+
+            // Show relevant inputs based on function
+            switch (currentFunction) {
+                case 'factorial':
+                    input1.style.display = 'inline-block';
+                    input1.placeholder = 'Enter n (0-15)';
+                    input1.max = 15;
+                    break;
+                case 'fibonacci':
+                case 'fibonacci_optimized':
+                    input1.style.display = 'inline-block';
+                    input1.placeholder = 'Enter n (0-30)';
+                    input1.max = 30;
+                    break;
+                case 'power':
+                    input1.style.display = 'inline-block';
+                    input2.style.display = 'inline-block';
+                    input1.placeholder = 'Base';
+                    input2.placeholder = 'Exponent';
+                    break;
+                case 'gcd':
+                    input1.style.display = 'inline-block';
+                    input2.style.display = 'inline-block';
+                    input1.placeholder = 'Number 1';
+                    input2.placeholder = 'Number 2';
+                    break;
+                case 'reverse_string':
+                    stringInput.style.display = 'inline-block';
+                    stringInput.placeholder = 'Enter text to reverse';
+                    break;
+                case 'sum_array':
+                    arrayInput.style.display = 'inline-block';
+                    arrayInput.placeholder = 'Numbers separated by commas';
+                    break;
+                case 'binary_search':
+                    arrayInput.style.display = 'inline-block';
+                    input1.style.display = 'inline-block';
+                    arrayInput.placeholder = 'Sorted numbers (comma separated)';
+                    input1.placeholder = 'Search target';
+                    break;
+                case 'tower_of_hanoi':
+                    input1.style.display = 'inline-block';
+                    input1.placeholder = 'Number of disks (1-8)';
+                    input1.max = 8;
+                    break;
+            }
+        }
+
+        function executeFunction() {
+            clearResults();
+            callStack = [];
+            executionStartTime = performance.now();
+
+            const input1 = parseInt(document.getElementById('input1').value) || 0;
+            const input2 = parseInt(document.getElementById('input2').value) || 0;
+            const stringInput = document.getElementById('string-input').value || '';
+            const arrayInput = document.getElementById('array-input').value || '';
+
+            let result;
+            let inputDisplay = '';
+
+            // Add loading state
+            const resultDisplay = document.getElementById('result-display');
+            resultDisplay.classList.add('loading');
+            resultDisplay.innerHTML = '<p>🔄 Executing recursive function...</p>';
+
+            setTimeout(() => {
+                try {
+                    switch (currentFunction) {
+                        case 'factorial':
+                            if (input1 < 0 || input1 > 15) throw new Error('Please enter a number between 0 and 15');
+                            result = factorial(input1);
+                            inputDisplay = input1.toString();
+                            break;
+                        case 'fibonacci':
+                            if (input1 < 0 || input1 > 30) throw new Error('Please enter a number between 0 and 30');
+                            result = fibonacci(input1);
+                            inputDisplay = input1.toString();
+                            showFibonacciSequence(input1);
+                            break;
+                        case 'fibonacci_optimized':
+                            if (input1 < 0 || input1 > 30) throw new Error('Please enter a number between 0 and 30');
+                            result = fibonacciOptimized(input1);
+                            inputDisplay = input1.toString();
+                            showFibonacciSequence(input1);
+                            break;
+                        case 'power':
+                            result = power(input1, input2);
+                            inputDisplay = `${input1}^${input2}`;
+                            break;
+                        case 'sum_array':
+                            const arr = arrayInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x));
+                            if (arr.length === 0) throw new Error('Please enter valid numbers');
+                            result = sumArray(arr);
+                            inputDisplay = `[${arr.join(', ')}]`;
+                            break;
+                        case 'reverse_string':
+                            if (!stringInput) throw new Error('Please enter a string');
+                            result = reverseString(stringInput);
+                            inputDisplay = `"${stringInput}"`;
+                            break;
+                        case 'binary_search':
+                            const searchArr = arrayInput.split(',').map(x => parseInt(x.trim())).filter(x => !isNaN(x)).sort((a, b) => a - b);
+                            if (searchArr.length === 0) throw new Error('Please enter valid numbers');
+                            result = binarySearch(searchArr, input1);
+                            inputDisplay = `${input1} in [${searchArr.join(', ')}]`;
+                            result = result === -1 ? 'Not found' : `Found at index ${result}`;
+                            break;
+                        case 'gcd':
+                            if (input1 <= 0 || input2 <= 0) throw new Error('Please enter positive numbers');
+                            result = gcd(input1, input2);
+                            inputDisplay = `${input1}, ${input2}`;
+                            break;
+                        case 'tower_of_hanoi':
+                            if (input1 < 1 || input1 > 8) throw new Error('Please enter a number between 1 and 8');
+                            const moves = towerOfHanoi(input1);
+                            inputDisplay = `${input1} disks`;
+                            showHanoiMoves(moves);
+                            result = `${moves.length} moves required`;
+                            break;
+                    }
+
+                    const executionTime = (performance.now() - executionStartTime).toFixed(2);
+
+                    document.getElementById('current-input').textContent = inputDisplay;
+                    document.getElementById('current-result').textContent = result;
+                    document.getElementById('call-count').textContent = callStack.length;
+
+                    resultDisplay.classList.remove('loading');
+                    resultDisplay.classList.add('success');
+                    resultDisplay.innerHTML = `
+                        <div>
+                            <strong>✅ Result:</strong> ${result}<br>
+                            <small style="color: #a0a0a0;">Execution time: ${executionTime}ms | Function calls: ${callStack.length}</small>
+                        </div>
+                    `;
+
+                } catch (error) {
+                    resultDisplay.classList.remove('loading');
+                    resultDisplay.classList.add('error');
+                    resultDisplay.innerHTML = `<strong>❌ Error:</strong> ${error.message}`;
+                }
+            }, 300);
+        }
+
+        // Recursive functions implementation
+        function factorial(n) {
+            callStack.push(`factorial(${n})`);
+            if (n <= 1) return 1;
+            return n * factorial(n - 1);
+        }
+
+        function fibonacci(n) {
+            callStack.push(`fibonacci(${n})`);
+            if (n <= 1) return n;
+            return fibonacci(n - 1) + fibonacci(n - 2);
+        }
+
+        function fibonacciOptimized(n, memo = {}) {
+            if (n in memo) return memo[n];
+            callStack.push(`fibonacci_opt(${n})`);
+            if (n <= 1) return n;
+            memo[n] = fibonacciOptimized(n - 1, memo) + fibonacciOptimized(n - 2, memo);
+            return memo[n];
+        }
+
+        function power(base, exp) {
+            callStack.push(`power(${base}, ${exp})`);
+            if (exp === 0) return 1;
+            if (exp === 1) return base;
+            if (exp > 0) return base * power(base, exp - 1);
+            return 1 / power(base, -exp);
+        }
+
+        function sumArray(arr, index = 0) {
+            callStack.push(`sumArray([...], ${index})`);
+            if (index >= arr.length) return 0;
+            return arr[index] + sumArray(arr, index + 1);
+        }
+
+        function reverseString(s) {
+            callStack.push(`reverse("${s.length > 10 ? s.substring(0, 10) + '...' : s}")`);
+            if (s.length <= 1) return s;
+            return s[s.length - 1] + reverseString(s.slice(0, -1));
+        }
+
+        function binarySearch(arr, target, left = 0, right = null) {
+            if (right === null) right = arr.length - 1;
+            callStack.push(`binarySearch([...], ${target}, ${left}, ${right})`);
+
+            if (left > right) return -1;
+
+            const mid = Math.floor((left + right) / 2);
+            if (arr[mid] === target) return mid;
+
+            if (arr[mid] > target) {
+                return binarySearch(arr, target, left, mid - 1);
+            } else {
+                return binarySearch(arr, target, mid + 1, right);
+            }
+        }
+
+        function gcd(a, b) {
+            callStack.push(`gcd(${a}, ${b})`);
+            if (b === 0) return a;
+            return gcd(b, a % b);
+        }
+
+        function towerOfHanoi(n, source = 'A', dest = 'C', aux = 'B') {
+            const moves = [];
+
+            function hanoiHelper(n, src, dst, aux) {
+                if (n === 1) {
+                    moves.push(`Move disk 1 from rod ${src} to rod ${dst}`);
+                    return;
+                }
+                hanoiHelper(n - 1, src, aux, dst);
+                moves.push(`Move disk ${n} from rod ${src} to rod ${dst}`);
+                hanoiHelper(n - 1, aux, dst, src);
+            }
+
+            hanoiHelper(n, source, dest, aux);
+            return moves;
+        }
+
+        function showCallStack() {
+            const stackDiv = document.getElementById('call-stack-display');
+            const itemsDiv = document.getElementById('call-stack-items');
+
+            if (callStack.length === 0) {
+                itemsDiv.innerHTML = '<p>No function calls recorded. Execute a function first.</p>';
+            } else {
+                itemsDiv.innerHTML = '';
+                callStack.forEach(call => {
+                    const item = document.createElement('div');
+                    item.className = 'call-item';
+                    item.textContent = call;
+                    itemsDiv.appendChild(item);
+                });
+            }
+
+            stackDiv.style.display = stackDiv.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function showFibonacciSequence(n) {
+            if (n > 15) return; // Don't show for large numbers
+
+            const specialDiv = document.getElementById('special-display');
+            const sequence = [];
+
+            for (let i = 0; i <= n; i++) {
+                if (i <= 1) sequence.push(i);
+                else sequence.push(sequence[i - 1] + sequence[i - 2]);
+            }
+
+            let html = '<h4>Fibonacci Sequence:</h4><div class="fibonacci-sequence">';
+            sequence.forEach((num, index) => {
+                html += `<div class="fib-number">F(${index})=${num}</div>`;
+            });
+            html += '</div>';
+
+            specialDiv.innerHTML = html;
+            specialDiv.style.display = 'block';
+        }
+
+        function showHanoiMoves(moves) {
+            const specialDiv = document.getElementById('special-display');
+            let html = '<h4>Tower of Hanoi Moves:</h4><div class="hanoi-moves">';
+
+            moves.slice(0, 20).forEach((move, index) => {
+                html += `<div class="hanoi-move">${index + 1}. ${move}</div>`;
+            });
+
+            if (moves.length > 20) {
+                html += `<div class="hanoi-move">... and ${moves.length - 20} more moves</div>`;
+            }
+
+            html += '</div>';
+            specialDiv.innerHTML = html;
+            specialDiv.style.display = 'block';
+        }
+
+        function clearResults() {
+            callStack = [];
+            document.getElementById('result-display').innerHTML = '<p>Select a recursive function and provide input to see the result.</p>';
+            document.getElementById('call-stack-display').style.display = 'none';
+            document.getElementById('special-display').style.display = 'none';
+            document.getElementById('current-input').textContent = '-';
+            document.getElementById('current-result').textContent = '-';
+        }
+
+        // Initialize
+        updateInputFields();
+    </script>
+</body>
+
+</html>
