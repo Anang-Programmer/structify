@@ -1,4 +1,4 @@
-# Proyek Pembelajaran Struktur Data
+# Structify
 
 🎯 **Implementasi Interaktif Struktur Data Menggunakan Python & Web (Flask)**
 
