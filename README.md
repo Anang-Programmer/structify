@@ -7,31 +7,32 @@ Proyek ini menyediakan implementasi lengkap dari struktur data dasar dengan anta
 ## 📁 Struktur Proyek
 
 ```
-├── models/                 # Implementasi Python berbasis console
-│   ├── array.py            # Operasi array/list
-│   ├── graph.py            # Algoritma graf (DFS, BFS, dll)
-│   ├── linked_list.py      # Linked list (singly/doubly)
-│   ├── pointer.py          # Konsep pointer dan referensi
-│   ├── queue.py            # Implementasi antrian (FIFO)
-│   ├── record.py           # Tipe data record/struct
-│   ├── recursion.py        # Algoritma rekursif
-│   ├── stack.py            # Implementasi stack (LIFO)
-│   └── tree.py             # Struktur dan operasi pohon
-├── templates/              # Template HTML untuk Flask
-│   ├── array.html          # Visualisasi array interaktif
-│   ├── graph.html          # Visualisasi graf & algoritma
-│   ├── linked_list.html    # Simulasi linked list
-│   ├── pointer.html        # Demo referensi pointer
-│   ├── queue.html          # Visualisasi operasi antrian
-│   ├── record.html         # Demo struktur record
-│   ├── recursion.html      # Visualisasi rekursi
-│   ├── stack.html          # Demo operasi stack
-│   ├── tree.html           # Visualisasi struktur pohon
-│   └── index.html          # Halaman navigasi utama
-├── static/                 # Aset statis (CSS, JS, gambar)
-├── app.py                  # Web server Flask utama
-├── requirements.txt        # Dependensi Python
-└── README.md               # Dokumentasi proyek (file ini)
+├── models/                     # Implementasi Python berbasis console
+│   ├── array.py                # Operasi array/list
+│   ├── graph.py                # Algoritma graf (DFS, BFS, dll)
+│   ├── linked_list.py          # Linked list (singly/doubly)
+│   ├── pointer.py              # Konsep pointer dan referensi
+│   ├── queue.py                # Implementasi antrian (FIFO)
+│   ├── record.py               # Tipe data record/struct
+│   ├── recursion.py            # Algoritma rekursif
+│   ├── stack.py                # Implementasi stack (LIFO)
+│   └── tree.py                 # Struktur dan operasi pohon
+├── templates/                  # Template HTML Flask
+│   ├── index.html              # Halaman navigasi utama
+│   └── sections/               # Template HTML per struktur data
+│       ├── array.html          # Visualisasi array interaktif
+│       ├── graph.html          # Visualisasi graf & algoritma
+│       ├── linked_list.html    # Simulasi linked list
+│       ├── pointer.html        # Demo referensi pointer
+│       ├── queue.html          # Visualisasi operasi antrian
+│       ├── record.html         # Demo struktur record
+│       ├── recursion.html      # Visualisasi rekursi
+│       ├── stack.html          # Demo operasi stack
+│       ├── tree.html           # Visualisasi struktur pohon
+├── Procfile/                   # Gunicorn
+├── app.py                      # Web server Flask utama
+├── requirements.txt            # Dependensi Python
+└── README.md                   # Dokumentasi proyek (file ini)
 ```
 
 ## 🚀 Memulai Proyek
@@ -46,8 +47,8 @@ Proyek ini menyediakan implementasi lengkap dari struktur data dasar dengan anta
 1. **Clone repositori**
 
    ```bash
-   git clone https://github.com/username/data-structures-learning.git
-   cd data-structures-learning
+   git clone https://github.com/Anang-Programmer/structify.git
+   cd structify
    ```
 
 2. **Install dependensi Python**
