@@ -78,7 +78,7 @@ python models/stack.py
 2. Buka browser dan akses:
 
    ```
-   http://localhost:5000
+   http://127.0.0.1:5000
    ```
 
 3. Navigasi halaman utama (`index.html`) akan menampilkan menu struktur data interaktif.
